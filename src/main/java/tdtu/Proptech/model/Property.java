@@ -34,7 +34,7 @@ public class Property {
     @Column(nullable = false)
     private String status; // AVAILABLE, SOLD, RENTED
 
-    @OneToMany(mappedBy = "properties", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 }
 
