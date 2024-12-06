@@ -17,9 +17,6 @@ public class ApiUserController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
-
     @PostMapping("/register")
     public ResponseEntity<ApiResponse> register(@RequestBody User user){
         try {

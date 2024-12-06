@@ -15,7 +15,7 @@ public class Rental {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rentalId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false)

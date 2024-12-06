@@ -8,5 +8,4 @@ public interface UserService {
     User register(User user);
     AuthResponse verify(User user);
     User getUserById(Long userId);
-    User assignSubscription(User user, Subscription subscription);
 }

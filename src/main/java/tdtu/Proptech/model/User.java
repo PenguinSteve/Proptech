@@ -18,10 +18,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = true, unique = true)
+    @Column
     private String name;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -29,6 +29,9 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+    @Column
+    private String imageURL;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_id", nullable = true)
@@ -52,6 +55,9 @@ public class User {
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
+
+    @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Property> properties;
 }
 
 

@@ -17,7 +17,7 @@ public class Subscription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long subscriptionId;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String planName;

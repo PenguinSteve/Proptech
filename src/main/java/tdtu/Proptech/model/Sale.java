@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long saleId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "property_id", nullable = false)

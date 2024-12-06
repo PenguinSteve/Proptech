@@ -14,7 +14,7 @@ import java.util.List;
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long propertyId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -36,5 +36,9 @@ public class Property {
 
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+
+    @ManyToOne
+    @JoinColumn(name = "realtor_id", nullable = false)
+    private User realtor;
 }
 
