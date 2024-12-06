@@ -7,10 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tdtu.SpringCommerce.model.User;
-import tdtu.SpringCommerce.repository.UserRepository;
-import tdtu.SpringCommerce.response.AuthResponse;
-import tdtu.SpringCommerce.security.jwt.JWTService;
+import tdtu.Proptech.model.Subscription;
+import tdtu.Proptech.model.User;
+import tdtu.Proptech.repository.UserRepository;
+import tdtu.Proptech.response.AuthResponse;
+import tdtu.Proptech.security.jwt.JWTService;
+
+import java.time.LocalDateTime;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -56,5 +59,16 @@ public class UserServiceImpl implements UserService{
             return new AuthResponse(jwtToken, user);
         }
         return null;
+    }
+
+    public User assignSubscription(User user, Subscription subscription) {
+        user.setSubscription(subscription);
+        LocalDateTime startDate = LocalDateTime.now();
+        user.setStartDate(startDate);
+
+        LocalDateTime endDate = startDate.plusDays(subscription.getDurationInDays());
+        user.setEndDate(endDate);
+
+        return userRepository.save(user);
     }
 }

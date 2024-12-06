@@ -5,9 +5,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import tdtu.SpringCommerce.model.User;
-import tdtu.SpringCommerce.model.UserPrinciple;
-import tdtu.SpringCommerce.repository.UserRepository;
+import tdtu.Proptech.model.User;
+import tdtu.Proptech.model.UserPrinciple;
+import tdtu.Proptech.repository.UserRepository;
 
 @Service
 public class CustomUserDetailService implements UserDetailsService {

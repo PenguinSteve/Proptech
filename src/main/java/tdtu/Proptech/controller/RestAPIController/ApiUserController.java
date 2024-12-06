@@ -6,9 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import tdtu.SpringCommerce.model.User;
-import tdtu.SpringCommerce.response.ApiResponse;
-import tdtu.SpringCommerce.service.user.UserService;
+import tdtu.Proptech.model.User;
+import tdtu.Proptech.response.ApiResponse;
+import tdtu.Proptech.service.user.UserService;
 
 @RestController
 @RequestMapping("/api/user")

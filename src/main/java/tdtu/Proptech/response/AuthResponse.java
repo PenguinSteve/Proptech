@@ -1,7 +1,7 @@
 package tdtu.Proptech.response;
 
 import lombok.Data;
-import tdtu.SpringCommerce.model.User;
+import tdtu.Proptech.model.User;
 
 @Data
 public class AuthResponse {
