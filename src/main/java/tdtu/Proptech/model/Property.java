@@ -1,5 +1,6 @@
 package tdtu.Proptech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,12 +10,12 @@ import lombok.Setter;
 import java.util.List;
 
 @Entity
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 @Table(name = "properties")
 public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long propertyId;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -22,19 +23,28 @@ public class Property {
     @Column(nullable = false)
     private String address;
 
-    @Column(nullable = true)
-    private Double salesPrice;
-
-    @Column(nullable = true)
-    private Double rentalPrice;
+    private Double price;
 
     @Column(nullable = false)
-    private String type; // SALE, RENT
+    private String type; // SALES, RENTAL
 
     @Column(nullable = false)
     private String status; // AVAILABLE, SOLD, RENTED
 
+    @ManyToOne
+    @JoinColumn(name = "realtor_id", nullable = false)
+    private User realtor;
+
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
+
+    public Property (String name, String address, Double price, String type, String status, User realtor){
+        this.name = name;
+        this.address = address;
+        this.price = price;
+        this.type = type;
+        this.status = status;
+        this.realtor = realtor;
+    }
 }
 

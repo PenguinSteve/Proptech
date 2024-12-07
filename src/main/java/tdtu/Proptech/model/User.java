@@ -1,5 +1,6 @@
 package tdtu.Proptech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column
     private String name;
 
     @Column(nullable = false)
@@ -27,8 +28,14 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(nullable = false, unique = true)
+    private String phone;
+
     @Column(nullable = false)
     private String role;
+
+    @Column
+    private String imageURL;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscription_id", nullable = true)
@@ -52,6 +59,13 @@ public class User {
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Property> properties;
+
+    @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments;
 }
 
 

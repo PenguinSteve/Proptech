@@ -4,12 +4,8 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class UpdateProductRequest {
+public class UserUpdateRequest {
     private String name;
-    private Double price;
-    private String brand;
-    private String color;
-    private String description;
+    private String phone;
     private MultipartFile imageURL;
-    private String category;
 }
