@@ -13,9 +13,13 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/cart")
-    public String cart() {
-        return "cart";
+    @GetMapping("/properties")
+    public String properties() {
+        return "properties";
+    }
+    @GetMapping("/properties/single")
+    public String singleProperty() {
+    	return "property-single";
     }
 
     @GetMapping("cart/checkout")
