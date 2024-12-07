@@ -20,7 +20,7 @@ public class Subscription {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String planName;
+    private String planName; // VIP | Normal
 
     @Column(nullable = false)
     private Double price;
@@ -30,7 +30,4 @@ public class Subscription {
 
     @Column(nullable = false)
     private String benefits;
-
-    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<User> users = new ArrayList<>();
 }

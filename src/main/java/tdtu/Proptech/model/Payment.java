@@ -16,8 +16,9 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private Long transactionId;
+    @ManyToOne
+    @JoinColumn(name = "subscription_id", nullable = false)
+    private Subscription subscription;
 
     @Column(nullable = false)
     private Double amount;
@@ -26,5 +27,9 @@ public class Payment {
     private LocalDateTime paymentDate;
 
     private String paymentMethod;
+
+    @ManyToOne
+    @JoinColumn(name = "realtor_id", nullable = false)
+    private User realtor;
 }
 

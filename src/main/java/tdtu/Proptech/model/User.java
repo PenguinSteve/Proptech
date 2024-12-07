@@ -58,6 +58,9 @@ public class User {
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Property> properties;
+
+    @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments;
 }
 
 
