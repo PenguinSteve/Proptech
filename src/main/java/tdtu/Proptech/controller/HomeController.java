@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping
 public class HomeController {
 
-    @GetMapping(value = {"/", "/home", ""})
+    @GetMapping(value = { "/", "/home", "" })
     public String index() {
-        return "home";
+        return "index";
     }
 
     @GetMapping("/cart")
@@ -39,5 +39,7 @@ public class HomeController {
     }
 
     @GetMapping("/error")
-    public String error(){return "error";}
+    public String error() {
+        return "error";
+    }
 }
