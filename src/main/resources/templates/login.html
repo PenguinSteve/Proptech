@@ -1,0 +1,48 @@
+<div th:replace="~{/layout/header}"></div>
+<div class="hero page-inner overlay" style="background-image: url('images/hero_bg_3.jpg')">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading" data-aos="fade-up">
+                    Login
+                </h1>
+
+                <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item">
+                            <a href="properties.html">Login</a>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="form-control p-4" style="background-color: rgb(245, 244, 244);">
+                    <form id="login">
+                        <div class="mb-3">
+                            <input type="text" name="username" class="form-control bg-white border-0 py-3 px-4"
+                                placeholder="Tên đăng nhập" required />
+                        </div>
+                        <div class="mb-3">
+                            <input type="password" name="password" class="form-control bg-white border-0 py-3 px-4"
+                                placeholder="Mật khẩu" required />
+                        </div>
+                        <div>
+                            <button class="rounded-pill btn btn-primary w-100 py-3 px-5" type="submit">
+                                Đăng nhập
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{/layout/footer}"></div>
