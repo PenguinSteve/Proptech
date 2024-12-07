@@ -1,5 +1,6 @@
 package tdtu.Proptech.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,6 +17,7 @@ public class Image {
 
     private String imageURL;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "property_id")
     private Property property;

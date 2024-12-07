@@ -1,14 +1,14 @@
 package tdtu.Proptech.response;
 
 import lombok.Data;
-import tdtu.Proptech.model.User;
+import tdtu.Proptech.dto.UserDTO;
 
 @Data
 public class AuthResponse {
     private String token;
-    private User user;
+    private UserDTO user;
 
-    public AuthResponse(String jwtToken, User user) {
+    public AuthResponse(String jwtToken, UserDTO user) {
         this.token = jwtToken;
         this.user = user;
     }
