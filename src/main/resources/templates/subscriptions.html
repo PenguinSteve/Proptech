@@ -1,0 +1,104 @@
+<div th:replace="~{/layout/header}"></div>
+
+<!-- Hero Section -->
+<div class="hero py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-12 mx-auto shadow rounded bg-white p-4">
+                <div class="row">
+                    <!-- Basic Membership -->
+                    <div class="col-lg-4 p-3">
+                        <div class="border rounded p-4 text-center">
+                            <h3>Hội viên Cơ bản</h3>
+                            <p>Phù hợp với môi giới mới hoặc giỏ hàng nhỏ</p>
+                            <p class="text-muted">
+                                từ <strong>499.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
+                                Tiết kiệm đến 190.000 đ mỗi tháng
+                            </p>
+
+                            <h5 class="text-primary">Gói tin hàng tháng</h5>
+                            <ul class="list-unstyled text-start">
+                                <li>1 Tin VIP Vàng (hiển thị 7 ngày)</li>
+                                <li>1 Tin VIP Bạc (hiển thị 7 ngày)</li>
+                                <li>15 Tin Thường (hiển thị 10 ngày)</li>
+                                <li>15 lượt đẩy cho Tin Thường</li>
+                            </ul>
+                            <button class="btn btn-primary w-100 mt-4"
+                                onclick="showPurchaseForm('Hội viên Cơ bản', 499000)">Mua ngay</button>
+                        </div>
+                    </div>
+                    <!-- Standard Membership -->
+                    <div class="col-lg-4 p-3">
+                        <div class="border rounded p-4 text-center">
+                            <h3>Hội viên Tiêu chuẩn</h3>
+                            <p>Phù hợp với môi giới mới hoặc giỏ hàng nhỏ</p>
+                            <p class="text-muted">
+                                từ <strong>999.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
+                                Tiết kiệm đến 228.000 đ mỗi tháng
+                            </p>
+
+                            <h5 class="text-primary">Gói tin hàng tháng</h5>
+                            <ul class="list-unstyled text-start">
+                                <li>2 Tin VIP Vàng (hiển thị 7 ngày)</li>
+                                <li>2 Tin VIP Bạc (hiển thị 7 ngày)</li>
+                                <li>20 Tin Thường (hiển thị 10 ngày)</li>
+                                <li>20 lượt đẩy cho Tin Thường</li>
+                            </ul>
+                            <button class="btn btn-primary w-100 mt-4"
+                                onclick="showPurchaseForm('Hội viên Tiêu chuẩn', 999000)">Mua ngay</button>
+                        </div>
+                    </div>
+                    <!-- Premium Membership -->
+                    <div class="col-lg-4 p-3">
+                        <div class="border rounded p-4 text-center">
+                            <h3>Hội viên Cao cấp</h3>
+                            <p>Phù hợp với môi giới chuyên nghiệp</p>
+                            <p class="text-muted">
+                                từ <strong>1999.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
+                                Tiết kiệm đến 328.000 đ mỗi tháng
+                            </p>
+
+                            <h5 class="text-primary">Gói tin hàng tháng</h5>
+                            <ul class="list-unstyled text-start">
+                                <li>3 Tin VIP Vàng (hiển thị 7 ngày)</li>
+                                <li>3 Tin VIP Bạc (hiển thị 7 ngày)</li>
+                                <li>30 Tin Thường (hiển thị 10 ngày)</li>
+                                <li>30 lượt đẩy cho Tin Thường</li>
+                            </ul>
+                            <button class="btn btn-primary w-100 mt-4"
+                                onclick="showPurchaseForm('Hội viên Cao cấp', 1999000)">Mua ngay</button>
+                        </div>
+                    </div>
+                    <!-- Purchase Form -->
+                    <div id="purchase-form" class="row align-items-center mt-5 d-none">
+                        <div class="col-lg-6 mx-auto shadow rounded bg-white p-4">
+                            <h3 id="package-name" class="text-center mb-4"></h3>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="buyer-name" class="form-label">Tên người mua</label>
+                                    <input type="text" id="buyer-name" class="form-control" placeholder="Nhập tên">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="buyer-email" class="form-label">Email</label>
+                                    <input type="email" id="buyer-email" class="form-control" placeholder="Nhập email">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="buyer-phone" class="form-label">Số điện thoại</label>
+                                    <input type="text" id="buyer-phone" class="form-control"
+                                        placeholder="Nhập số điện thoại">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="package-price" class="form-label">Giá gói</label>
+                                    <input type="text" id="package-price" class="form-control" readonly>
+                                </div>
+                                <button type="button" class="btn btn-success w-100" onclick="completePayment()">Thanh
+                                    toán</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{/layout/footer}"></div>

@@ -9,16 +9,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
     @GetMapping(value = {"/", ""})
     public String index() {
-        return "admin";
+        return "dashboard";
+    }
+    @GetMapping("/review")
+    public String review() {
+    	return "review-property";
     }
 
-    @GetMapping("/product/create")
-    public String createProduct() {
-        return "create_product";
-    }
-
-    @GetMapping("/product/update/{id}")
-    public String updateProduct() {
-        return "update_product";
-    }
 }

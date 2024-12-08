@@ -61,7 +61,7 @@
         <!-- Header -->
         <div class="bg-primary text-white p-3 rounded-top">
             <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0" id="step-title">Tạo tin</h4>
+                <h4 class="mb-0" id="step-title">Thông tin thuê</h4>
                 <button class="btn btn-outline-light btn-sm">
                     <a href="/" class="text-decoration-none text-light">Thoát</a>
                 </button>
@@ -76,45 +76,39 @@
             <form id="form-section">
                 <div class="mb-3">
                     <label class="form-label">Tên bất động sản</label>
-                    <input type="text" class="form-control" id="name" placeholder="Nhập tên">
+                    <input type="text" class="form-control" id="name" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ">
+                    <input type="text" class="form-control" id="address" readonly>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Loại bất động sản</label>
-                    <select class="form-select" id="propertyType">
-                        <option value="">Chọn loại</option>
-                        <option value="nha">Nhà</option>
-                        <option value="dat">Đất</option>
-                        <option value="can-ho">Căn hộ</option>
-                    </select>
+                    <label class="form-label">Giá thuê</label>
+                    <input type="number" class="form-control" id="address" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Hạn thuê</label>
+                    <input type="date" class="form-control" id="address">
+                </div>
 
+                <h5>Thông tin người thuê</h5>
+                <div class="mb-3">
+                    <label class="form-label">Tên </label>
+                    <input type="text" class="form-control" id="area" min="0" placeholder="Nhập tên người mua">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Diện tích (m²)</label>
-                    <input type="number" class="form-control" id="area" min="0" placeholder="Nhập diện tích">
+                    <label class="form-label">Email </label>
+                    <input type="email" class="form-control" id="area" min="0" placeholder="Nhập email người mua">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Giá</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control" id="price" min="0" placeholder="Nhập giá">
-                        <span class="input-group-text">VNĐ</span>
-                    </div>
-                </div>
-                <h5 class="mb-3 text-primary mt-3 mb-3 ">Thêm hình ảnh</h5>
-                <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
-                <div class="mb-3">
-                    <input type="file" class="form-control" id="image-upload" multiple accept="image/*">
+                    <label class="form-label">Số điện thoại </label>
+                    <input type="number" class="form-control" id="area" min="0" placeholder="Nhập tên người mua">
                 </div>
             </form>
         </div>
 
         <!-- Footer -->
         <div class="bg-white p-3 text-center rounded-bottom">
-            <button id="back-btn" class="btn btn-outline-light btn-lg w-30 mt-3 mb-3" style="display: none;">Quay
-                lại</button>
             <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
         </div>
     </div>

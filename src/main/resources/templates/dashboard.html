@@ -1,0 +1,30 @@
+<div th:replace="~{/layout/admin/header}"></div>
+<div class="container-fluid pt-4 px-4">
+    <h3 class="mb-0 text-secondary" style="text-align: center;">Danh Sách Bài Đăng</h3>
+    <div class="bg-light text-center rounded p-4">
+        <div class="table-responsive">
+            <table class="table ">
+                <thead>
+                    <tr>
+                        <th scope="col">No.</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Stock</th>
+                        <th scope="col">Category</th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Color</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="products">
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <div id="pagination-page"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{/layout/admin/footer}"></div>
