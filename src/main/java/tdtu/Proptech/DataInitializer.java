@@ -66,5 +66,4 @@ public class DataInitializer {
 		subscriptionRepository.save(standard);
 		subscriptionRepository.save(vip);
 	}
-
 }

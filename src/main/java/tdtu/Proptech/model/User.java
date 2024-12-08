@@ -37,7 +37,7 @@ public class User {
     @Column
     private String imageURL;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "subscription_id", nullable = true)
     private Subscription subscription;
 

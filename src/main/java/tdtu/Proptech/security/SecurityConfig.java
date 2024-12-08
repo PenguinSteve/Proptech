@@ -52,10 +52,9 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers("/api/user/login", "/api/user/register", "/api/order").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/product/**").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.PUT, "/api/product/**").hasRole("ADMIN")
-                    .requestMatchers(HttpMethod.DELETE, "/api/product/**").hasRole("ADMIN")
+                    .requestMatchers("/api/user/login", "/api/user/register").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/api/listing/**").hasRole("REALTOR")
+                    .requestMatchers(HttpMethod.PUT, "/api/listing/**").hasRole("REALTOR")
                     .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated())
                 .formLogin(form -> form
@@ -79,5 +78,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

@@ -4,7 +4,6 @@ import lombok.Data;
 import tdtu.Proptech.model.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 public class UserDTO {
@@ -15,6 +14,5 @@ public class UserDTO {
     private String role;
     private String imageURL;
     private Subscription subscription;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDateTime expireSubscription;
 }
