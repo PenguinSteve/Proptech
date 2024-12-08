@@ -94,4 +94,17 @@ public class ApiListingController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
+
+    @GetMapping("/user/history")
+    public ResponseEntity<ApiResponse> getRealtorProperties() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentEmail = authentication.getName();
+        try {
+            List<Property> properties = listingService.getAllPropertiesByUserEmail(currentEmail);
+            List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
+            return ResponseEntity.ok(new ApiResponse("Properties retrieved successfully", propertyDTOs));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }

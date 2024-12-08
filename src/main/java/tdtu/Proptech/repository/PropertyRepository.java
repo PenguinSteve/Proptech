@@ -23,5 +23,5 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
 
     List<Property> findByType(String type);
 
-    List<Property> findByRealtorId(Long realtorId);
+    List<Property> findByRealtorEmail(String realtorEmail);
 }

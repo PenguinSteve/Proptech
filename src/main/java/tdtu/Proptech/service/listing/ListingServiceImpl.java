@@ -208,8 +208,8 @@ public class ListingServiceImpl implements ListingService{
     }
 
     @Override
-    public List<Property> getAllPropertiesByUserId(Long realtorId) {
-        return propertyRepository.findByRealtorId(realtorId);
+    public List<Property> getAllPropertiesByUserEmail(String realtorEmail) {
+        return propertyRepository.findByRealtorEmail(realtorEmail);
     }
 
     @Override
