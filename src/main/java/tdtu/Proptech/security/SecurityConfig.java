@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
@@ -24,6 +26,7 @@ import tdtu.Proptech.security.jwt.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Bean
     public ModelMapper modelMapper() {
@@ -52,9 +55,7 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                    .requestMatchers("/api/user/login", "/api/user/register").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/listing/**").hasRole("REALTOR")
-                    .requestMatchers(HttpMethod.PUT, "/api/listing/**").hasRole("REALTOR")
+                    .requestMatchers("/api/user/login", "/api/user/register", "/api/listing").permitAll()
                     .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated())
                 .formLogin(form -> form

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class ApiListingController {
     private final ListingService listingService;
     
     @PostMapping
+    @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> uploadProperty(UploadPropertyRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentEmail = authentication.getName();
@@ -37,10 +39,12 @@ public class ApiListingController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> modifyProperty(@PathVariable Long id, UploadPropertyRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentEmail = authentication.getName();
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+
             return ResponseEntity.ok(new ApiResponse("Property modified successfully", listingService.converPropertyToPropertyDTO(listingService.modifyProperty(currentEmail, id, request))));
         }
         catch (UnauthorizedAccessException e){
@@ -96,10 +100,12 @@ public class ApiListingController {
     }
 
     @GetMapping("/user/history")
+    @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> getRealtorProperties() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentEmail = authentication.getName();
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+
             List<Property> properties = listingService.getAllPropertiesByUserEmail(currentEmail);
             List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
             return ResponseEntity.ok(new ApiResponse("Properties retrieved successfully", propertyDTOs));
@@ -108,5 +114,52 @@ public class ApiListingController {
         }
     }
 
+    @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> getPendingProperties(){
+        try {
+            List<Property> properties = listingService.getPendingProperties();
+            List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
+            return ResponseEntity.ok(new ApiResponse("Pending properties retrieved successfully", propertyDTOs));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 
+    @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('REALTOR')")
+    public ResponseEntity<ApiResponse> updateStatusProperty(@PathVariable Long id, @RequestBody String type){
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String currentEmail = authentication.getName();
+
+            if(!"UNAVAILABLE".equals(type)){
+                throw new RuntimeException("This API does not support types other than UNAVAILABLE.");
+            }
+            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updateStatusProperty(currentEmail, id, type));
+
+            return ResponseEntity.ok(new ApiResponse("Property's status updated successfully", property));
+        }catch (UnauthorizedAccessException e){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(e.getMessage(), null));
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse> searchProperties(
+                                                        @RequestParam(required = false) String type,
+                                                        @RequestParam(required = false) Double minPrice,
+                                                        @RequestParam(required = false) Double maxPrice,
+                                                        @RequestParam(required = false) String name,
+                                                        @RequestParam(required = false) String address) {
+        try {
+            List<Property> properties = listingService.getPropertiesByCriteria(type, minPrice, maxPrice, name, address);
+            List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
+            return ResponseEntity.ok(new ApiResponse("Properties retrieved successfully", propertyDTOs));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
 }
