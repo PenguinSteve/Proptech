@@ -1,0 +1,94 @@
+<div th:replace="~{/layout/header}"></div>
+
+<div class="hero py-5 bg-light">
+    <div class="hero-slide">
+        <div class="img overlay" style="background-image: url('images/hero_bg_3.jpg')"></div>
+        <div class="img overlay" style="background-image: url('images/hero_bg_2.jpg')"></div>
+        <div class="img overlay" style="background-image: url('images/hero_bg_1.jpg')"></div>
+    </div>
+    <!-- Overlay cho form đăng ký -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8 col-sm-10 shadow rounded bg-white p-4 position-relative">
+                <!-- Nút đóng -->
+                <button id="close-register" class="btn-close position-absolute top-0 end-0 m-3"
+                    aria-label="Close"></button>
+                <!-- Tiêu đề -->
+                <h3 class="text-dark mb-4 text-center">Đăng ký</h3>
+                <!-- Form -->
+                <form id="register-form">
+                    <!-- Tên -->
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Họ và tên</label>
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Nhập họ và tên"
+                            required>
+                    </div>
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Nhập email"
+                            required>
+                    </div>
+                    <!-- Số điện thoại -->
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Số điện thoại</label>
+                        <input type="text" id="phone" name="phone" class="form-control" placeholder="Nhập số điện thoại"
+                            required>
+                    </div>
+                    <!-- Mật khẩu -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Mật khẩu</label>
+                        <input type="password" id="password" name="password" class="form-control"
+                            placeholder="Nhập mật khẩu" required>
+                    </div>
+                    <!-- Nhập lại mật khẩu -->
+                    <div class="mb-3">
+                        <label for="confirm-password" class="form-label">Nhập lại mật khẩu</label>
+                        <input type="password" id="confirm-password" name="confirm-password" class="form-control"
+                            placeholder="Nhập lại mật khẩu" required>
+                    </div>
+                    <!-- Nút Đăng ký -->
+                    <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <span class="text-muted">Đã là thành viên? <a href="/login"
+                                class="text-decoration-none text-primary">Đăng nhập</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{/layout/footer}"></div>
+<script>
+    $(document).ready(function () {
+
+        $('#register-form').submit(async function (e) {
+            e.preventDefault()
+            let password = $('input[name=password]').val()
+            let confirmPassword = $('input[name=confirm-password]').val()
+            if (password !== confirmPassword) {
+                alert("Mật khẩu không trùng khớp")
+                return
+            }
+            let name = $('input[name=name]').val()
+            let email = $('input[name=email]').val()
+            let phone = $('input[name=phone]').val()
+            let response = await fetch('/api/user/register', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name, email, password, phone })
+            })
+            let apiReponse = await response.json()
+            console.log(response)
+            if (apiReponse.data == null) {
+                alert("Đăng kí không thành công")
+                return
+            }
+            alert("Thành công")
+            window.location.href = '/login'
+
+        })
+    })
+</script>

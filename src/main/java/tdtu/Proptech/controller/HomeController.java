@@ -27,11 +27,7 @@ public class HomeController {
         return "checkout";
     }
 
-    @GetMapping("/thankyou")
-    public String thankyouPage() {
-        return "thankyou";
-    }
-
+   
     @GetMapping("/login")
     public String login() {
         return "login";
@@ -46,4 +42,10 @@ public class HomeController {
     public String error() {
         return "error";
     }
+    
+    @GetMapping("/addProperty")
+    public String addProperty() {
+    	return "add-property";
+    }
+    
 }
