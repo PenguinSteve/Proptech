@@ -15,8 +15,8 @@ public interface ListingService {
     Property modifyProperty(String userEmail, Long id, UploadPropertyRequest request);
     List<Property> getPropertiesByCriteria(String type, Double minPrice, Double maxPrice, String name, String address);
     List<Property> getAllPropertiesByUserEmail(String realtorEmail);
-    Property updatePendingProperty(Long id, String type);
-    Property updateStatusProperty(String userEmail, Long id, String type);
+    Property updatePendingProperty(Long id, String status);
+    Property updateStatusProperty(String userEmail, Long id, String status);
     List<Property> getPendingAvailableProperties();
 
 

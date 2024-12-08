@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor
 @Table(name = "sales")
-public class Sale {
+public class Sales {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +33,7 @@ public class Sale {
     @Column(nullable = false)
     private String buyerName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String buyerEmail;
 
     @Column(nullable = false)

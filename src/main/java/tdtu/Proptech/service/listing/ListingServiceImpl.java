@@ -136,6 +136,13 @@ public class ListingServiceImpl implements ListingService{
             throw new UnauthorizedAccessException("You are not authorized to update this property.");
         }
 
+        if ("PENDING_SOLD".equals(existingProperty.getStatus()) ||
+            "PENDING_RENTED".equals(existingProperty.getStatus()) ||
+            "SOLD".equals(existingProperty.getStatus()) ||
+            "RENTED".equals(existingProperty.getStatus())) {
+            throw new UnauthorizedAccessException("You are not authorized to update this property.");
+        }
+
         Property updatedProperty = updateProperty(existingProperty, request);
 
         return propertyRepository.save(updatedProperty);
@@ -219,10 +226,10 @@ public class ListingServiceImpl implements ListingService{
     }
 
     @Override
-    public Property updatePendingProperty(Long id, String type) {
+    public Property updatePendingProperty(Long id, String status) {
         Property existingProperty = getPropertyById(id);
 
-        switch (type) {
+        switch (status) {
             case "AVAILABLE":
                 if ("PENDING_AVAILABLE".equals(existingProperty.getStatus())) {
                     existingProperty.setStatus("AVAILABLE");
@@ -242,21 +249,21 @@ public class ListingServiceImpl implements ListingService{
                 existingProperty.setStatus("UNAVAILABLE");
                 break;
             default:
-                throw new RuntimeException("Invalid property status: " + type);
+                throw new RuntimeException("Invalid property status: " + status);
         }
 
         return propertyRepository.save(existingProperty);
     }
 
     @Override
-    public Property updateStatusProperty(String userEmail, Long id, String type) {
+    public Property updateStatusProperty(String userEmail, Long id, String status) {
         Property existingProperty = getPropertyById(id);
 
         if (!userEmail.equals(existingProperty.getRealtor().getEmail())) {
             throw new UnauthorizedAccessException("You are not authorized to update this property.");
         }
 
-        switch (type) {
+        switch (status) {
             case "UNAVAILABLE":
                 if (!"RENTED".equals(existingProperty.getStatus()) && !"SOLD".equals(existingProperty.getStatus())) {
                     existingProperty.setStatus("UNAVAILABLE");
@@ -269,7 +276,7 @@ public class ListingServiceImpl implements ListingService{
                 existingProperty.setStatus("PENDING_RENTED");
                 break;
             default:
-                throw new RuntimeException("Invalid property status: " + type);
+                throw new RuntimeException("Invalid property status: " + status);
         }
 
         return propertyRepository.save(existingProperty);
