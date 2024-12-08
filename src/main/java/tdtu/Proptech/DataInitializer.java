@@ -23,8 +23,8 @@ public class DataInitializer {
 	@Bean
 	CommandLineRunner loadData() {
 		return args -> {
-			loadDataUsers();
 			loadSubscription();
+			loadDataUsers();
 		};
 	}
 
