@@ -1,48 +1,73 @@
 <div th:replace="~{/layout/header}"></div>
-<div class="hero page-inner overlay" style="background-image: url('images/hero_bg_3.jpg')">
-    <div class="container">
-        <div class="row justify-content-center align-items-center">
-            <div class="col-lg-9 text-center mt-5">
-                <h1 class="heading" data-aos="fade-up">
-                    Login
-                </h1>
 
-                <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
-                    <ol class="breadcrumb text-center justify-content-center">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                        <li class="breadcrumb-item">
-                            <a href="properties.html">Login</a>
-                        </li>
-                    </ol>
-                </nav>
-            </div>
-        </div>
+<div class="hero py-5 bg-light">
+    <div class="hero-slide">
+        <div class="img overlay" style="background-image: url('images/hero_bg_3.jpg')"></div>
+        <div class="img overlay" style="background-image: url('images/hero_bg_2.jpg')"></div>
+        <div class="img overlay" style="background-image: url('images/hero_bg_1.jpg')"></div>
     </div>
-</div>
-<div class="section">
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="form-control p-4" style="background-color: rgb(245, 244, 244);">
-                    <form id="login">
+        <div class="row align-items-center">
+            <!-- Cột trái: Hình ảnh căn nhà và form đăng nhập trong một khối -->
+            <div class="col-lg-8 mx-auto shadow rounded bg-white p-0 d-flex flex-lg-row flex-column">
+                <!-- Hình ảnh -->
+                <div class="col-lg-6 p-0">
+                    <img src="images/img_5.jpg" alt="Hình căn nhà" class="img-fluid rounded-start">
+                </div>
+
+                <!-- Form đăng nhập -->
+                <div class="col-lg-6 p-4 d-flex flex-column justify-content-center">
+                    <h3 class="text-dark mb-4 text-center">Đăng nhập</h3>
+                    <form>
+                        <!-- Input Email -->
                         <div class="mb-3">
-                            <input type="text" name="username" class="form-control bg-white border-0 py-3 px-4"
-                                placeholder="Tên đăng nhập" required />
+                            <label for="email" class="form-label">Email</label>
+                            <input type="text" id="email" name="email" class="form-control" placeholder="Email"
+                                required>
                         </div>
+                        <!-- Input Password -->
                         <div class="mb-3">
-                            <input type="password" name="password" class="form-control bg-white border-0 py-3 px-4"
-                                placeholder="Mật khẩu" required />
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="password" id="password" name="password" class="form-control"
+                                placeholder="Mật khẩu" required>
                         </div>
-                        <div>
-                            <button class="rounded-pill btn btn-primary w-100 py-3 px-5" type="submit">
-                                Đăng nhập
-                            </button>
-                        </div>
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
                     </form>
+                    <!-- Quên mật khẩu và Đăng ký -->
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <a href="/sellernet/khoi-phuc-mat-khau" class="text-decoration-none text-primary">Quên mật
+                            khẩu?</a>
+                        <span class="text-muted">Chưa là thành viên? <a href="./register.html"
+                                class="text-decoration-none text-primary">Đăng ký</a></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div th:replace="~{/layout/footer}"></div>
+<script>
+    $(document).ready(function () {
+        $('form').submit(async function (e) {
+            e.preventDefault()
+            let password = $('input[name=password]').val()
+            let email = $('input[name=email]').val()
+            let response = await fetch('/api/user/login', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            })
+            let apiReponse = await response.json()
+            console.log(response)
+            if (apiReponse.data == null) {
+                alert("Tài khoản hoặc mật khẩu không chính xác")
+                return
+            }
+            alert("Thành công")
+            window.location.href = '/'
+        })
+    })
+</script>

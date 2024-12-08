@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Bài đăng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bg-primary {
+            background-color: #005555 !important;
+        }
+
+        .btn-outline-light {
+            border-color: #005555 !important;
+            color: #005555 !important;
+        }
+
+        .btn-outline-light:hover {
+            background-color: #005555 !important;
+            color: white !important;
+        }
+
+        .text-primary {
+            color: #005555 !important;
+        }
+
+        .border-primary {
+            border-color: #005555 !important;
+        }
+
+        .btn-primary {
+            background-color: #005555 !important;
+            border-color: #005555 !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #005555 !important;
+            border-color: #005555 !important;
+        }
+
+        .progress-bar {
+            background-color: #005555 !important;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn-lg {
+            height: 50px;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container my-5">
+        <!-- Header -->
+        <div class="bg-primary text-white p-3 rounded-top">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="mb-0" id="step-title">Tạo tin</h4>
+                <button class="btn btn-outline-light btn-sm">
+                    <a href="/" class="text-decoration-none text-light">Thoát</a>
+                </button>
+            </div>
+        </div>
+
+
+
+        <!-- Nội dung -->
+        <div class="bg-white p-4" id="step-content">
+
+            <div id="form-section">
+                <div class="mb-3">
+                    <label class="form-label">Tên bất động sản</label>
+                    <input type="text" class="form-control" id="name" placeholder="Nhập tên">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Địa chỉ</label>
+                    <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Loại bất động sản</label>
+                    <select class="form-select" id="propertyType">
+                        <option value="">Chọn loại</option>
+                        <option value="nha">Nhà</option>
+                        <option value="dat">Đất</option>
+                        <option value="can-ho">Căn hộ</option>
+                    </select>
+
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Diện tích (m²)</label>
+                    <input type="number" class="form-control" id="area" min="0" placeholder="Nhập diện tích">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Giá</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="price" min="0" placeholder="Nhập giá">
+                        <span class="input-group-text">VNĐ</span>
+                    </div>
+                </div>
+                <h5 class="mb-3 text-primary mt-3 mb-3 ">Thêm hình ảnh</h5>
+                <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
+                <div class="mb-3">
+                    <input type="file" class="form-control" id="image-upload" multiple accept="image/*">
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-white p-3 text-center rounded-bottom">
+            <button id="back-btn" class="btn btn-outline-light btn-lg w-30 mt-3 mb-3" style="display: none;">Quay
+                lại</button>
+            <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let currentStep = 1;
+            let imageFiles = [];
+
+            const cards = document.querySelectorAll('.option-card');
+            const continueBtn = document.getElementById('continue-btn');
+            const backBtn = document.getElementById('back-btn');
+            const formSection = document.getElementById('form-section');
+            const progressBar = document.querySelector('.progress-bar');
+            const stepTitle = document.getElementById('step-title');
+            const stepHeader = document.getElementById('step-header');
+
+            // Chọn nhu cầu
+            cards.forEach(card => {
+                card.addEventListener('click', () => {
+                    cards.forEach(c => c.classList.remove('bg-primary', 'text-white'));
+                    card.classList.add('bg-primary', 'text-white');
+                    continueBtn.disabled = false;
+                    formSection.innerHTML = `
+                        <h5 class="mb-3 text-primary mt-3 mb-3">Điền thông tin</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" placeholder="Nhập địa chỉ">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Loại bất động sản</label>
+                            <select class="form-select" id="propertyType">
+                                <option value="">Chọn loại</option>
+                                <option value="nha">Nhà</option>
+                                <option value="dat">Đất</option>
+                                <option value="can-ho">Căn hộ</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Diện tích (m²)</label>
+                            <input type="number" class="form-control" id="area" min="0" placeholder="Nhập diện tích">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Giá</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="price" min="0" placeholder="Nhập giá">
+                                <span class="input-group-text">VNĐ</span>
+                            </div>
+                        </div>
+                        <h5 class="mb-3 text-primary">Thông tin liên hệ</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Tên liên hệ</label>
+                            <input type="text" class="form-control" id="contactName" placeholder="Nhập tên">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Nhập email">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="phone" placeholder="Nhập số điện thoại">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tiêu đề</label>
+                            <input type="text" class="form-control" id="title" placeholder="Nhập tiêu đề">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Mô tả</label>
+                            <textarea class="form-control" id="description" rows="4" placeholder="Nhập mô tả"></textarea>
+                        </div>
+                    `;
+                    stepTitle.textContent = 'Bước 1: Thêm thông tin';
+                    stepHeader.textContent = 'Bước 1: Thêm thông tin';
+                    backBtn.style.display = 'none'; // Ẩn nút quay lại ở bước 1
+                });
+            });
+
+            continueBtn.addEventListener('click', () => {
+                if (currentStep === 1) {
+                    const address = document.getElementById('address').value.trim();
+                    const propertyType = document.getElementById('propertyType').value.trim();
+                    const area = document.getElementById('area').value.trim();
+                    const price = document.getElementById('price').value.trim();
+
+                    if (!address || !propertyType || !area || !price) {
+                        alert('Vui lòng điền đầy đủ thông tin trước khi tiếp tục.');
+                        return;
+                    }
+
+                    currentStep = 2;
+                    progressBar.style.width = '66%';
+                    formSection.innerHTML = `
+                        <h5 class="mb-3 text-primary mt-3 mb-3 ">Thêm hình ảnh</h5>
+                        <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
+                        <div class="mb-3">
+                            <input type="file" class="form-control" id="image-upload" multiple accept="image/*">
+                        </div>
+                        <div class="row g-3" id="image-preview"></div>
+                    `;
+                    backBtn.style.display = 'inline-block'; // Hiển thị nút quay lại ở bước 2
+
+                    const imageUpload = document.getElementById('image-upload');
+                    const imagePreview = document.getElementById('image-preview');
+
+                    imageUpload.addEventListener('change', () => {
+                        const files = Array.from(imageUpload.files);
+                        if (files.length < 3) {
+                            alert('Vui lòng chọn ít nhất 3 hình ảnh.');
+                            continueBtn.disabled = true;
+                            return;
+                        }
+
+                        continueBtn.disabled = false;
+                        imageFiles = files;
+                        imagePreview.innerHTML = files.map((file, index) => `
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <img src="${URL.createObjectURL(file)}" class="card-img-top" alt="Hình ${index + 1}">
+                                    <div class="card-body text-center">
+                                        <p class="small text-muted">${file.name}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                    });
+                    stepTitle.textContent = 'Bước 2: Thêm hình ảnh';
+                    stepHeader.textContent = 'Bước 2: Thêm hình ảnh';
+                } else if (currentStep === 2) {
+                    if (imageFiles.length < 3) {
+                        alert('Vui lòng chọn ít nhất 3 hình ảnh.');
+                        return;
+                    }
+                    // Tiến hành xử lý tiếp theo (ví dụ: lưu dữ liệu)
+                    alert('Thông tin đã được lưu!');
+                }
+            });
+
+            backBtn.addEventListener('click', () => {
+                currentStep = 1;
+                progressBar.style.width = '33%';
+                formSection.innerHTML = `
+                    <h5 class="mb-3 text-primary">Chọn nhu cầu</h5>
+                    <div class="row g-3" id="options">
+                        <div class="col-md-6">
+                            <div class="card border-primary text-center option-card" id="sell">
+                                <div class="card-body">
+                                    <h6 class="text-primary">Bán</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-primary text-center option-card" id="rent">
+                                <div class="card-body">
+                                    <h6 class="text-primary">Cho thuê</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                stepTitle.textContent = 'Bước 1: Thông tin BĐS';
+                stepHeader.textContent = 'Bước 1: Thông tin BĐS';
+                backBtn.style.display = 'none';
+                continueBtn.disabled = true;
+            });
+        });
+    </script>
+</body>
+
+</html>
