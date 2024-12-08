@@ -47,5 +47,21 @@ public class HomeController {
     public String addProperty() {
     	return "add-property";
     }
+    @GetMapping("/myProperties")
+    public String myProperty() {
+    	return "my-properties";
+    }
+    @GetMapping("/sellProcess")
+    public String sellProcess() {
+    	return "sell-process";
+    }
+    @GetMapping("/rentalProcess")
+    public String rentalProcess() {
+    	return "rental-process";
+    }
+    @GetMapping("/subscriptions")
+    public String subscriptions() {
+    	return "subscriptions";
+    }
     
 }
