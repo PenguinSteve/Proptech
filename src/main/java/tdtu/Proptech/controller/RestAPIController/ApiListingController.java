@@ -128,15 +128,15 @@ public class ApiListingController {
 
     @PutMapping("/realtor/{id}/status")
     @PreAuthorize("hasRole('REALTOR')")
-    public ResponseEntity<ApiResponse> updateUnavailableProperty(@PathVariable Long id, @RequestBody String type){
+    public ResponseEntity<ApiResponse> updateUnavailableProperty(@PathVariable Long id, @RequestBody String status){
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentEmail = authentication.getName();
 
-            if(!"UNAVAILABLE".equals(type)){
-                throw new RuntimeException("This API does not support types other than UNAVAILABLE.");
+            if(!"UNAVAILABLE".equals(status)){
+                throw new RuntimeException("This API does not support status other than UNAVAILABLE.");
             }
-            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updateStatusProperty(currentEmail, id, type));
+            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updateStatusProperty(currentEmail, id, status));
 
             return ResponseEntity.ok(new ApiResponse("Property's status updated successfully", property));
         }catch (UnauthorizedAccessException e){
@@ -151,12 +151,12 @@ public class ApiListingController {
                          * and AVAILABLE for approval of a posting property ***/
     @PutMapping("/admin/pending/{id}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updatePendingAvailableProperty(@PathVariable Long id, @RequestBody String type){
+    public ResponseEntity<ApiResponse> updatePendingAvailableProperty(@PathVariable Long id, @RequestBody String status){
         try{
-            if(!"UNAVAILABLE".equals(type) && !"AVAILABLE".equals(type)){
-                throw new RuntimeException("This API does not support types other than UNAVAILABLE and AVAILABLE.");
+            if(!"UNAVAILABLE".equals(status) && !"AVAILABLE".equals(status)){
+                throw new RuntimeException("This API does not support status other than UNAVAILABLE and AVAILABLE.");
             }
-            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updatePendingProperty(id, type));
+            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updatePendingProperty(id, status));
 
             return ResponseEntity.ok(new ApiResponse("Property's status updated successfully", property));
         }
