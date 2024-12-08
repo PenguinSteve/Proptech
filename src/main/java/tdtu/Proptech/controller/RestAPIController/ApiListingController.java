@@ -25,7 +25,7 @@ public class ApiListingController {
 
     private final ListingService listingService;
     
-    @PostMapping
+    @PostMapping("/realtor")
     @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> uploadProperty(UploadPropertyRequest request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -38,7 +38,7 @@ public class ApiListingController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/realtor/{id}")
     @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> modifyProperty(@PathVariable Long id, UploadPropertyRequest request){
         try {
@@ -99,7 +99,7 @@ public class ApiListingController {
         }
     }
 
-    @GetMapping("/user/history")
+    @GetMapping("/realtor/history")
     @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> getRealtorProperties() {
         try {
@@ -114,11 +114,11 @@ public class ApiListingController {
         }
     }
 
-    @GetMapping("/pending")
+    @GetMapping("/admin/pending")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> getPendingProperties(){
+    public ResponseEntity<ApiResponse> getPendingAvailableProperties(){
         try {
-            List<Property> properties = listingService.getPendingProperties();
+            List<Property> properties = listingService.getPendingAvailableProperties();
             List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
             return ResponseEntity.ok(new ApiResponse("Pending properties retrieved successfully", propertyDTOs));
         } catch (RuntimeException e) {
@@ -126,9 +126,9 @@ public class ApiListingController {
         }
     }
 
-    @PutMapping("/{id}/status")
+    @PutMapping("/realtor/{id}/status")
     @PreAuthorize("hasRole('REALTOR')")
-    public ResponseEntity<ApiResponse> updateStatusProperty(@PathVariable Long id, @RequestBody String type){
+    public ResponseEntity<ApiResponse> updateUnavailableProperty(@PathVariable Long id, @RequestBody String type){
         try{
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentEmail = authentication.getName();
@@ -141,6 +141,24 @@ public class ApiListingController {
             return ResponseEntity.ok(new ApiResponse("Property's status updated successfully", property));
         }catch (UnauthorizedAccessException e){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponse(e.getMessage(), null));
+        }
+        catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    /*** This API only receive UNAVAILABLE for disapproval of a posting property
+                         * and AVAILABLE for approval of a posting property ***/
+    @PutMapping("/admin/pending/{id}/status")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse> updatePendingAvailableProperty(@PathVariable Long id, @RequestBody String type){
+        try{
+            if(!"UNAVAILABLE".equals(type) && !"AVAILABLE".equals(type)){
+                throw new RuntimeException("This API does not support types other than UNAVAILABLE and AVAILABLE.");
+            }
+            PropertyDTO property = listingService.converPropertyToPropertyDTO(listingService.updatePendingProperty(id, type));
+
+            return ResponseEntity.ok(new ApiResponse("Property's status updated successfully", property));
         }
         catch (RuntimeException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));

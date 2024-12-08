@@ -238,14 +238,15 @@ public class ListingServiceImpl implements ListingService{
                     existingProperty.setStatus("RENTED");
                 }
                 break;
+            case "UNAVAILABLE":
+                existingProperty.setStatus("UNAVAILABLE");
+                break;
             default:
                 throw new RuntimeException("Invalid property status: " + type);
         }
 
         return propertyRepository.save(existingProperty);
     }
-
-
 
     @Override
     public Property updateStatusProperty(String userEmail, Long id, String type) {
@@ -275,9 +276,9 @@ public class ListingServiceImpl implements ListingService{
     }
 
     @Override
-    public List<Property> getPendingProperties() {
+    public List<Property> getPendingAvailableProperties() {
         return propertyRepository.findAll().stream()
-                .filter(property -> property.getStatus().startsWith("PENDING_"))
+                .filter(property -> property.getStatus().startsWith("PENDING_AVAILABLE"))
                 .collect(Collectors.toList());
     }
 

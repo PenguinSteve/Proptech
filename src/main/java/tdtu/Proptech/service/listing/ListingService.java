@@ -17,7 +17,7 @@ public interface ListingService {
     List<Property> getAllPropertiesByUserEmail(String realtorEmail);
     Property updatePendingProperty(Long id, String type);
     Property updateStatusProperty(String userEmail, Long id, String type);
-    List<Property> getPendingProperties();
+    List<Property> getPendingAvailableProperties();
 
 
     PropertyDTO converPropertyToPropertyDTO(Property property);
