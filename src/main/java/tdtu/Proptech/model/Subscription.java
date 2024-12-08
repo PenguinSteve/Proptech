@@ -20,7 +20,7 @@ public class Subscription {
     private Long id;
 
     @Column(nullable = false, unique = true)
-    private String planName; // VIP | Normal
+    private String planName; // Starter | Basic | Standard | VIP
 
     @Column(nullable = false)
     private Double price;

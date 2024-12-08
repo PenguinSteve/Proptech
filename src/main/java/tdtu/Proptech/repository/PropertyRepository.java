@@ -22,4 +22,6 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
                                             @Param("address") String address);
 
     List<Property> findByType(String type);
+
+    List<Property> findByRealtorId(Long realtorId);
 }

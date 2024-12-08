@@ -19,6 +19,7 @@ import tdtu.Proptech.request.UserUpdateRequest;
 import tdtu.Proptech.response.AuthResponse;
 import tdtu.Proptech.security.jwt.JWTService;
 import tdtu.Proptech.service.image.ImageService;
+import tdtu.Proptech.service.subscription.SubscriptionService;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,8 @@ public class UserServiceImpl implements UserService{
 
 
     private final UserRepository userRepository;
+
+    private final SubscriptionService subscriptionService;
 
     private final AuthenticationManager authenticationManager;
 
@@ -69,12 +72,15 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User register(User user) {
+        Subscription starter = subscriptionService.getSubscriptionsByPlanName("STARTER");
         if(userRepository.findByEmail(user.getEmail()).isPresent()){
             throw new RuntimeException("Email already exist");
         }
         user.setImageURL("https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=");
         user.setRole("REALTOR");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setSubscription(starter);
+        user.setExpireSubscription(LocalDateTime.now().plusDays(starter.getDurationInDays()));
         return userRepository.save(user);
     }
 

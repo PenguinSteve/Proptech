@@ -14,6 +14,8 @@ public interface ListingService {
     Property uploadProperty(String userEmail, UploadPropertyRequest request);
     Property modifyProperty(String userEmail, Long id, UploadPropertyRequest request);
     List<Property> getPropertiesByCriteria(String type, Double minPrice, Double maxPrice, String name, String address);
+    List<Property> getAllPropertiesByUserId(Long realtorId);
 
     PropertyDTO converPropertyToPropertyDTO(Property property);
+    List<PropertyDTO> convertPropetiesToPropertiesDTO(List<Property> properties);
 }

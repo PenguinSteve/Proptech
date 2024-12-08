@@ -10,6 +10,7 @@ public class UploadPropertyRequest {
     private String name;
     private String address;
     private Double price;
+    private String area;
     private String type;
     private List<MultipartFile> images;
 }

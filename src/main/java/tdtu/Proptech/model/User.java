@@ -42,16 +42,13 @@ public class User {
     private Subscription subscription;
 
     @Column
-    private LocalDateTime startDate;
-
-    @Column
-    private LocalDateTime endDate;
+    private LocalDateTime expireSubscription;
 
     public boolean isSubscriptionActive() {
-        if (this.subscription == null || this.endDate == null) {
+        if (this.subscription == null || this.expireSubscription == null) {
             return false;
         }
-        return LocalDateTime.now().isBefore(this.endDate);
+        return LocalDateTime.now().isBefore(this.expireSubscription);
     }
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)

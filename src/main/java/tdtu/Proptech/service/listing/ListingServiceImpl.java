@@ -14,7 +14,9 @@ import tdtu.Proptech.request.UploadPropertyRequest;
 import tdtu.Proptech.service.image.ImageService;
 import tdtu.Proptech.service.user.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,17 +32,23 @@ public class ListingServiceImpl implements ListingService{
 
     @Override
     public List<Property> getAllProperties() {
-        return propertyRepository.findAll();
+        return propertyRepository.findAll().stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Property> getSalesProperties() {
-        return propertyRepository.findByType("SALES");
+        return propertyRepository.findByType("SALES").stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Property> getRentalProperties() {
-        return propertyRepository.findByType("RENTAL");
+        return propertyRepository.findByType("RENTAL").stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -64,14 +72,55 @@ public class ListingServiceImpl implements ListingService{
 
         return propertyRepository.save(createdProperty);
     }
-    private Property createProperty(User existingUser, UploadPropertyRequest request){
+    private Property createProperty(User existingUser, UploadPropertyRequest request) {
+        if (!existingUser.isSubscriptionActive()) {
+            throw new RuntimeException("User subscription is not active.");
+        }
+
+        long unexpiredPropertiesCount = existingUser.getProperties().stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .count();
+
+        String planName = existingUser.getSubscription().getPlanName();
+        int maxProperties;
+        int expireDays;
+
+        switch (planName) {
+            case "STARTER":
+                maxProperties = 5;
+                expireDays = 5;
+                break;
+            case "BASIC":
+                maxProperties = 10;
+                expireDays = 14;
+                break;
+            case "STANDARD":
+                maxProperties = 20;
+                expireDays = 21;
+                break;
+            case "VIP":
+                maxProperties = Integer.MAX_VALUE; // No limit
+                expireDays = 30;
+                break;
+            default:
+                throw new RuntimeException("Unknown subscription plan.");
+        }
+
+        if (unexpiredPropertiesCount >= maxProperties) {
+            throw new RuntimeException("User has reached the maximum number of unexpired properties for their subscription plan.");
+        }
+
+        LocalDateTime expireDate = LocalDateTime.now().plusDays(expireDays);
+
         return new Property(
                 request.getName(),
                 request.getAddress(),
                 request.getPrice(),
+                request.getArea(),
                 request.getType(),
                 "AVAILABLE",
-                existingUser
+                existingUser,
+                expireDate
         );
     }
 
@@ -88,11 +137,52 @@ public class ListingServiceImpl implements ListingService{
         return propertyRepository.save(updatedProperty);
     }
 
-    private Property updateProperty(Property existingProperty, UploadPropertyRequest request){
+    private Property updateProperty(Property existingProperty, UploadPropertyRequest request) {
+        User existingUser = existingProperty.getRealtor();
+
+        if (!existingUser.isSubscriptionActive()) {
+            throw new RuntimeException("User subscription is not active.");
+        }
+
+        long unexpiredPropertiesCount = existingUser.getProperties().stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .count();
+
+        String planName = existingUser.getSubscription().getPlanName();
+        int maxProperties;
+        int expireDays;
+
+        switch (planName) {
+            case "STARTER":
+                maxProperties = 5;
+                expireDays = 5;
+                break;
+            case "BASIC":
+                maxProperties = 10;
+                expireDays = 14;
+                break;
+            case "STANDARD":
+                maxProperties = 20;
+                expireDays = 21;
+                break;
+            case "VIP":
+                maxProperties = Integer.MAX_VALUE; // No limit
+                expireDays = 30;
+                break;
+            default:
+                throw new RuntimeException("Unknown subscription plan.");
+        }
+
+        if (unexpiredPropertiesCount > maxProperties) {
+            throw new RuntimeException("User has reached the maximum number of unexpired properties for their subscription plan.");
+        }
+
         existingProperty.setAddress(request.getAddress());
         existingProperty.setName(request.getName());
         existingProperty.setPrice(request.getPrice());
+        existingProperty.setArea(request.getArea());
         existingProperty.setType(request.getType());
+
         if (request.getImages() != null && !request.getImages().isEmpty()) {
             // Delete existing images from the database
             for (Image image : existingProperty.getImages()) {
@@ -104,12 +194,27 @@ public class ListingServiceImpl implements ListingService{
             List<Image> savedImages = imageService.saveImages(existingProperty, request.getImages());
             existingProperty.getImages().addAll(savedImages);
         }
+
+        existingProperty.setExpire(LocalDateTime.now().plusDays(expireDays));
+
         return existingProperty;
     }
 
     @Override
     public List<Property> getPropertiesByCriteria(String type, Double minPrice, Double maxPrice, String name, String address) {
-        return propertyRepository.findPropertiesByCriteria(type, minPrice, maxPrice, name, address);
+        return propertyRepository.findPropertiesByCriteria(type, minPrice, maxPrice, name, address).stream()
+                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Property> getAllPropertiesByUserId(Long realtorId) {
+        return propertyRepository.findByRealtorId(realtorId);
+    }
+
+    @Override
+    public List<PropertyDTO> convertPropetiesToPropertiesDTO(List<Property> properties){
+        return properties.stream().map(this :: converPropertyToPropertyDTO).toList();
     }
 
     @Override
