@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import tdtu.Proptech.dto.UserDTO;
 import tdtu.Proptech.exceptions.UnauthorizedAccessException;
 import tdtu.Proptech.model.User;
+import tdtu.Proptech.request.ChangePasswordRequest;
 import tdtu.Proptech.request.LoginRequest;
 import tdtu.Proptech.request.RegisterRequest;
 import tdtu.Proptech.request.UserUpdateRequest;
@@ -71,5 +72,18 @@ public class ApiUserController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
 		}
 
+	}
+
+	@PutMapping("/{userId}/change-password")
+	public ResponseEntity<ApiResponse> changePassword(@PathVariable Long userId, @RequestBody ChangePasswordRequest request) {
+		try {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentUserEmail = authentication.getName();
+
+			userService.changePassword(currentUserEmail, userId, request.getOldPassword(), request.getNewPassword());
+			return ResponseEntity.ok(new ApiResponse("Password changed successfully", null));
+		} catch (RuntimeException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponse(e.getMessage(), null));
+		}
 	}
 }

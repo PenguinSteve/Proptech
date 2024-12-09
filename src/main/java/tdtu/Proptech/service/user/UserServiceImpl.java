@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tdtu.Proptech.dto.UserDTO;
@@ -97,6 +98,22 @@ public class UserServiceImpl implements UserService{
             return new AuthResponse(jwtToken, convertUserToDto(user));
         }
         return null;
+    }
+
+    @Override
+    public void changePassword(String userEmail, Long userId, String oldPassword, String newPassword) {
+        User existingUser = getUserById(userId);
+
+        if(!userEmail.equals(existingUser.getEmail())){
+            throw new UnauthorizedAccessException("You are not authorized to update this user's password.");
+        }
+
+        if (!passwordEncoder.matches(oldPassword, existingUser.getPassword())) {
+            throw new RuntimeException("Old password is incorrect.");
+        }
+
+        existingUser.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(existingUser);
     }
 
 
