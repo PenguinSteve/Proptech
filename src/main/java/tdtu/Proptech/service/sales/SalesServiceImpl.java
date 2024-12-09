@@ -27,8 +27,8 @@ public class SalesServiceImpl implements SalesService{
     private final ModelMapper modelMapper;
 
     @Override
-    public List<Property> getPendingSoldProperties() {
-        return propertyRepository.findByStatus("PENDING_SOLD");
+    public List<Sales> getPendingSoldProperties() {
+        return salesRepository.findByPropertyStatus("PENDING_SOLD");
     }
 
     @Override
@@ -57,8 +57,8 @@ public class SalesServiceImpl implements SalesService{
         return new Sales(
                 existingProperty,
                 existingProperty.getRealtor(),
-                request.getSaleDate(),
-                request.getSalePrice(),
+                request.getSalesDate(),
+                request.getSalesPrice(),
                 request.getBuyerName(),
                 request.getBuyerEmail(),
                 request.getBuyerPhone());
@@ -66,19 +66,19 @@ public class SalesServiceImpl implements SalesService{
 
 
     @Override
-    public Sales updatePendingSoldProperty(Long id, String status) {
-        Property existingProperty = listingService.getPropertyById(id);
-        Sales existingSales = getSalesByPropertyId(id);
+    public Sales updatePendingSoldProperty(Long propertyId, String status) {
+        Property existingProperty = listingService.getPropertyById(propertyId);
+        Sales existingSales = getSalesByPropertyId(propertyId);
 
         switch (status) {
             case "SOLD":
                 if ("PENDING_SOLD".equals(existingProperty.getStatus())) {
-                    listingService.updatePendingProperty(id, "SOLD");
+                    listingService.updatePendingProperty(propertyId, "SOLD");
                 }
                 break;
             case "UNAVAILABLE":
                 if ("PENDING_SOLD".equals(existingProperty.getStatus())) {
-                    listingService.updatePendingProperty(id, "UNAVAILABLE");
+                    listingService.updatePendingProperty(propertyId, "UNAVAILABLE");
                     salesRepository.deleteById(existingSales.getId());
                     return null;
                 }
@@ -87,12 +87,12 @@ public class SalesServiceImpl implements SalesService{
                 throw new RuntimeException("Invalid property status: " + status);
         }
 
-        return getSalesByPropertyId(id);
+        return getSalesByPropertyId(propertyId);
     }
 
     @Override
-    public Sales getSalesByPropertyId(Long id) {
-        return salesRepository.findByPropertyId(id).orElseThrow(() -> new RuntimeException("Sales not found!"));
+    public Sales getSalesByPropertyId(Long propertyId) {
+        return salesRepository.findByPropertyId(propertyId).orElseThrow(() -> new RuntimeException("Sales not found!"));
     }
 
     @Override

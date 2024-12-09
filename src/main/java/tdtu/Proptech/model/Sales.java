@@ -25,10 +25,10 @@ public class Sales {
     private User realtor;
 
     @Column(nullable = false)
-    private LocalDateTime saleDate;
+    private LocalDateTime salesDate;
 
     @Column(nullable = false)
-    private Double salePrice;
+    private Double salesPrice;
 
     @Column(nullable = false)
     private String buyerName;
@@ -39,12 +39,13 @@ public class Sales {
     @Column(nullable = false)
     private String buyerPhone;
 
-    public Sales(Property property, User realtor, LocalDateTime saleDate, Double salePrice, String buyerName, String buyerEmail, String buyerPhone) {
+    public Sales(Property property, User realtor, LocalDateTime salesDate, Double salesPrice, String buyerName, String buyerEmail, String buyerPhone) {
         this.property = property;
         this.realtor = realtor;
-        this.saleDate = saleDate;
-        this.salePrice = salePrice;
+        this.salesDate = salesDate;
+        this.salesPrice = salesPrice;
         this.buyerName = buyerName;
         this.buyerEmail = buyerEmail;
         this.buyerPhone = buyerPhone;
-    }}
+    }
+}

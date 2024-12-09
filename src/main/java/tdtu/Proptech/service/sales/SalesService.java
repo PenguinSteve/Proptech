@@ -9,11 +9,11 @@ import java.util.List;
 
 
 public interface SalesService {
-    List<Property> getPendingSoldProperties();
+    List<Sales> getPendingSoldProperties();
     List<Sales> getSoldProperties();
     Sales uploadSoldProperty(String userEmail, UploadSoldPropertyRequest request);
-    Sales updatePendingSoldProperty(Long id, String status);
-    Sales getSalesByPropertyId(Long id);
+    Sales updatePendingSoldProperty(Long propertyId, String status);
+    Sales getSalesByPropertyId(Long propertyId);
 
     SalesDTO convertSalesToSalesDTO(Sales sales);
     List<SalesDTO> convertListSalesToListSalesDTO(List<Sales> sales);
