@@ -10,6 +10,7 @@ import lombok.experimental.FieldDefaults;
 import tdtu.Proptech.model.Subscription;
 import tdtu.Proptech.model.User;
 import tdtu.Proptech.repository.SubscriptionRepository;
+import tdtu.Proptech.repository.UserRepository;
 import tdtu.Proptech.service.user.UserService;
 
 @Configuration
@@ -17,6 +18,7 @@ import tdtu.Proptech.service.user.UserService;
 @RequiredArgsConstructor
 public class DataInitializer {
 	private final UserService userService;
+	private final UserRepository userRepository;
 
 	private final SubscriptionRepository subscriptionRepository;
 
@@ -39,37 +41,50 @@ public class DataInitializer {
 		admin.setEmail("admin@gmail.com");
 		admin.setPassword("123456");
 		admin.setPhone("2");
-		userService.register(admin);
+		admin.setRole("ADMIN");
+		if (!userRepository.findByEmail("admin").isPresent())
+			userRepository.save(admin);
 	}
 
-	private void loadSubscription(){
-		Subscription starter = new Subscription();
-		starter.setPlanName("STARTER");
-		starter.setDurationInDays(5);
-		starter.setPrice(0.0);
-		starter.setBenefits("Tối đa 5 tin (Hiển thị trong 7 ngày");
+	private void loadSubscription() {
+		if (!subscriptionRepository.findByPlanName("STARTER").isPresent()) {
+			Subscription starter = new Subscription();
+			starter.setPlanName("STARTER");
+			starter.setDurationInDays(5);
+			starter.setPrice(0.0);
+			starter.setBenefits("Tối đa 5 tin (Hiển thị trong 7 ngày");
+			subscriptionRepository.save(starter);
+		}
+		if (!subscriptionRepository.findByPlanName("BASIC").isPresent()) {
 
-		Subscription basic = new Subscription();
-		basic.setPlanName("BASIC");
-		basic.setDurationInDays(30);
-		basic.setPrice(600000.0);
-		basic.setBenefits("Tối đa 10 tin (Hiển thị trong 14 ngày)");
+			Subscription basic = new Subscription();
+			basic.setPlanName("BASIC");
+			basic.setDurationInDays(30);
+			basic.setPrice(600000.0);
+			basic.setBenefits("Tối đa 10 tin (Hiển thị trong 14 ngày)");
+			subscriptionRepository.save(basic);
 
-		Subscription standard = new Subscription();
-		standard.setPlanName("STANDARD");
-		standard.setDurationInDays(30);
-		standard.setPrice(1100000.0);
-		standard.setBenefits("Tối đa 20 tin (Hiển thị trong 21 ngày)");
+		}
 
-		Subscription vip = new Subscription();
-		vip.setPlanName("VIP");
-		vip.setDurationInDays(30);
-		vip.setPrice(2500000.0);
-		vip.setBenefits("Không giới hạn tin (Hiển thị trong 30 ngày)");
+		if (!subscriptionRepository.findByPlanName("STANDARD").isPresent()) {
 
-		subscriptionRepository.save(starter);
-		subscriptionRepository.save(basic);
-		subscriptionRepository.save(standard);
-		subscriptionRepository.save(vip);
+			Subscription standard = new Subscription();
+			standard.setPlanName("STANDARD");
+			standard.setDurationInDays(30);
+			standard.setPrice(1100000.0);
+			standard.setBenefits("Tối đa 20 tin (Hiển thị trong 21 ngày)");
+			subscriptionRepository.save(standard);
+
+		}
+		if (!subscriptionRepository.findByPlanName("VIP").isPresent()) {
+
+			Subscription vip = new Subscription();
+			vip.setPlanName("VIP");
+			vip.setDurationInDays(30);
+			vip.setPrice(2500000.0);
+			vip.setBenefits("Không giới hạn tin (Hiển thị trong 30 ngày)");
+			subscriptionRepository.save(vip);
+
+		}
 	}
 }
