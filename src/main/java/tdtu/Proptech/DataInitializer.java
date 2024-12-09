@@ -3,6 +3,7 @@ package tdtu.Proptech;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import tdtu.Proptech.service.user.UserService;
 public class DataInitializer {
 	private final UserService userService;
 	private final UserRepository userRepository;
-
+	private final PasswordEncoder encoder;
 	private final SubscriptionRepository subscriptionRepository;
 
 	@Bean
@@ -35,12 +36,12 @@ public class DataInitializer {
 		user.setEmail("test@gmail.com");
 		user.setPassword("123456");
 		user.setPhone("1");
-
+		
 		if (!userRepository.findByEmail("test@gmail.com").isPresent())
 			userService.register(user);
 		User admin = new User();
 		admin.setEmail("admin@gmail.com");
-		admin.setPassword("123456");
+		admin.setPassword(encoder.encode("123456"));
 		admin.setPhone("2");
 		admin.setRole("ADMIN");
 		if (!userRepository.findByEmail("admin@gmail.com").isPresent())
