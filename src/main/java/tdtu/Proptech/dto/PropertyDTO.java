@@ -10,6 +10,7 @@ public class PropertyDTO {
     private String name;
     private String address;
     private Double price;
+    private String area;
     private String type;
     private String status;
     private UserDTO realtor;

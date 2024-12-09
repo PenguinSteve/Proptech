@@ -94,7 +94,13 @@ public class HomeController {
 		System.out.println(propertyDTOs);
 		return "my-properties";
 	}
-
+	@GetMapping("/editProperty/{id}")
+	public String myProperty(@PathVariable long id, Model model) {
+		Property property = listingService.getPropertyById(id);
+		PropertyDTO propertyDTO = listingService.converPropertyToPropertyDTO(property);
+		model.addAttribute("property", propertyDTO);
+		return "editProperty";
+	}
 	@GetMapping("/sellProcess/{id}")
 	public String sellProcess(@PathVariable long id, Model model) {
 		Property property = listingService.getPropertyById(id);

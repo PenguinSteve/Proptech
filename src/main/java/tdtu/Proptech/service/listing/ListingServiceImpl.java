@@ -33,21 +33,24 @@ public class ListingServiceImpl implements ListingService{
     @Override
     public List<Property> getAllProperties() {
         return propertyRepository.findAll().stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && "AVAILABLE".equals(property.getStatus()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Property> getSalesProperties() {
         return propertyRepository.findByType("SALES").stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && "AVAILABLE".equals(property.getStatus()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Property> getRentalProperties() {
         return propertyRepository.findByType("RENTAL").stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && "AVAILABLE".equals(property.getStatus()))
                 .collect(Collectors.toList());
     }
 
@@ -78,7 +81,8 @@ public class ListingServiceImpl implements ListingService{
         }
 
         long unexpiredPropertiesCount = existingUser.getProperties().stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && ("AVAILABLE".equals(property.getStatus()) || "PENDING_AVAILABLE".equals(property.getStatus())))
                 .count();
 
         String planName = existingUser.getSubscription().getPlanName();
@@ -118,7 +122,7 @@ public class ListingServiceImpl implements ListingService{
                 request.getPrice(),
                 request.getArea(),
                 request.getType(),
-                "AVAILABLE",
+                "PENDING_AVAILABLE",
                 existingUser,
                 expireDate
         );
@@ -132,11 +136,17 @@ public class ListingServiceImpl implements ListingService{
             throw new UnauthorizedAccessException("You are not authorized to update this property.");
         }
 
+        if ("PENDING_SOLD".equals(existingProperty.getStatus()) ||
+            "PENDING_RENTED".equals(existingProperty.getStatus()) ||
+            "SOLD".equals(existingProperty.getStatus()) ||
+            "RENTED".equals(existingProperty.getStatus())) {
+            throw new UnauthorizedAccessException("You are not authorized to update this property.");
+        }
+
         Property updatedProperty = updateProperty(existingProperty, request);
 
         return propertyRepository.save(updatedProperty);
     }
-
     private Property updateProperty(Property existingProperty, UploadPropertyRequest request) {
         User existingUser = existingProperty.getRealtor();
 
@@ -145,7 +155,8 @@ public class ListingServiceImpl implements ListingService{
         }
 
         long unexpiredPropertiesCount = existingUser.getProperties().stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && ("AVAILABLE".equals(property.getStatus()) || "PENDING_AVAILABLE".equals(property.getStatus())))
                 .count();
 
         String planName = existingUser.getSubscription().getPlanName();
@@ -182,6 +193,7 @@ public class ListingServiceImpl implements ListingService{
         existingProperty.setPrice(request.getPrice());
         existingProperty.setArea(request.getArea());
         existingProperty.setType(request.getType());
+        existingProperty.setStatus("PENDING_AVAILABLE");
 
         if (request.getImages() != null && !request.getImages().isEmpty()) {
             // Delete existing images from the database
@@ -203,13 +215,78 @@ public class ListingServiceImpl implements ListingService{
     @Override
     public List<Property> getPropertiesByCriteria(String type, Double minPrice, Double maxPrice, String name, String address) {
         return propertyRepository.findPropertiesByCriteria(type, minPrice, maxPrice, name, address).stream()
-                .filter(property -> property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                        && ("AVAILABLE".equals(property.getStatus())))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Property> getAllPropertiesByUserEmail(String realtorEmail) {
         return propertyRepository.findByRealtorEmail(realtorEmail);
+    }
+
+    @Override
+    public Property updatePendingProperty(Long id, String status) {
+        Property existingProperty = getPropertyById(id);
+
+        switch (status) {
+            case "AVAILABLE":
+                if ("PENDING_AVAILABLE".equals(existingProperty.getStatus())) {
+                    existingProperty.setStatus("AVAILABLE");
+                }
+                break;
+            case "SOLD":
+                if ("PENDING_SOLD".equals(existingProperty.getStatus())) {
+                    existingProperty.setStatus("SOLD");
+                }
+                break;
+            case "RENTED":
+                if ("PENDING_RENTED".equals(existingProperty.getStatus())) {
+                    existingProperty.setStatus("RENTED");
+                }
+                break;
+            case "UNAVAILABLE":
+                existingProperty.setStatus("UNAVAILABLE");
+                break;
+            default:
+                throw new RuntimeException("Invalid property status: " + status);
+        }
+
+        return propertyRepository.save(existingProperty);
+    }
+
+    @Override
+    public Property updateStatusProperty(String userEmail, Long id, String status) {
+        Property existingProperty = getPropertyById(id);
+
+        if (!userEmail.equals(existingProperty.getRealtor().getEmail())) {
+            throw new UnauthorizedAccessException("You are not authorized to update this property.");
+        }
+
+        switch (status) {
+            case "UNAVAILABLE":
+                if (!"RENTED".equals(existingProperty.getStatus()) && !"SOLD".equals(existingProperty.getStatus())) {
+                    existingProperty.setStatus("UNAVAILABLE");
+                }
+                break;
+            case "SOLD":
+                existingProperty.setStatus("PENDING_SOLD");
+                break;
+            case "RENTED":
+                existingProperty.setStatus("PENDING_RENTED");
+                break;
+            default:
+                throw new RuntimeException("Invalid property status: " + status);
+        }
+
+        return propertyRepository.save(existingProperty);
+    }
+
+    @Override
+    public List<Property> getPendingAvailableProperties() {
+        return propertyRepository.findAll().stream()
+                .filter(property -> property.getStatus().startsWith("PENDING_AVAILABLE"))
+                .collect(Collectors.toList());
     }
 
     @Override

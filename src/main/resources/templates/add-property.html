@@ -137,7 +137,7 @@
                 let form = e.target
                 let formData = new FormData(form)
                 let token = getCookie('token')
-                let response = await fetch("/api/listing", {
+                let response = await fetch("/api/listing/realtor", {
                     method: "POST", body: formData, headers: {
                         'Authorization': `Bearer ${token}`
                     }

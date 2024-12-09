@@ -42,10 +42,15 @@
                         <td>[[${property.address}]]</td>
                         <td>[[${property.type}]]</td>
                         <td>[[${property.status}]]</td>
-                        <td>
-                            <a href="#" class="btn btn-warning">MODIFY</a>
-                            <a href="/sellProcess" class="btn btn-success">SOLD</a>
-                            <a href="/rentalProcess" class="btn btn-primary">RENTED</a>
+                        <td th:if="${property.status!='PENDING_AVAILABLE'}">
+
+                            <a th:href="@{'/editProperty/'+${property.id}}" class="btn btn-warning">MODIFY</a>
+                            <a th:href="@{'/sellProcess/'+${property.id}}" class="btn btn-success">SOLD</a>
+                            <a th:href="@{'/rentalProcess/'+${property.id}}" class="btn btn-primary">RENTED</a>
+                        </td>
+                        <td th:unless="${property.status!='PENDING_AVAILABLE'}">
+
+                            <b class="text-danger">Đang chờ admin phê duyệt</b>
                         </td>
                     </tr>
                 </tbody>

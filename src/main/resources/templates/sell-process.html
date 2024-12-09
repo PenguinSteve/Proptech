@@ -76,11 +76,11 @@
             <form id="form-section">
                 <div class="mb-3">
                     <label class="form-label">Tên bất động sản</label>
-                    <input type="text" class="form-control" id="name" readonly>
+                    <input type="text" class="form-control" th:value="${property.name}" id="name" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" readonly>
+                    <input type="text" class="form-control" id="address" th:value="${property.address}" readonly>
                 </div>
                 <h5>Thông tin người mua</h5>
                 <div class="mb-3">

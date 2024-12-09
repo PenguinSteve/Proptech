@@ -52,7 +52,7 @@ public class User {
     }
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Sale> sales;
+    private List<Sales> sales;
 
     @OneToMany(mappedBy = "realtor", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Rental> rentals;

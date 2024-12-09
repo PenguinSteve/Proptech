@@ -68,7 +68,10 @@
             }
             document.cookie = `token=${apiReponse.data.token}; path=/;`;
             alert("Thành công")
-            window.location.href = '/'
+            if (apiReponse.data.user.role == "REALTOR")
+                window.location.href = '/'
+            window.location.href = '/admin'
+
         })
     })
 </script>
