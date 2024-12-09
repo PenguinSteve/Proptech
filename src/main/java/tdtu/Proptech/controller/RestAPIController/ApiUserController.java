@@ -1,6 +1,7 @@
 package tdtu.Proptech.controller.RestAPIController;
 
 import io.jsonwebtoken.JwtException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import tdtu.Proptech.dto.UserDTO;
 import tdtu.Proptech.exceptions.UnauthorizedAccessException;
 import tdtu.Proptech.model.User;
+import tdtu.Proptech.request.LoginRequest;
+import tdtu.Proptech.request.RegisterRequest;
 import tdtu.Proptech.request.UserUpdateRequest;
 import tdtu.Proptech.response.ApiResponse;
 import tdtu.Proptech.service.user.UserService;
@@ -24,8 +27,13 @@ public class ApiUserController {
 	private final UserService userService;
 
 	@PostMapping("/register")
-	public ResponseEntity<ApiResponse> register(@RequestBody User user) {
+	public ResponseEntity<ApiResponse> register(@Valid @RequestBody RegisterRequest request) {
 		try {
+			User user = new User();
+			user.setName(request.getName());
+			user.setEmail(request.getEmail());
+			user.setPhone(request.getPhone());
+			user.setPassword(request.getPassword());
 			User registeredUser = userService.register(user);
 			UserDTO userDTO = userService.convertUserToDto(registeredUser);
 			return ResponseEntity.status(HttpStatus.CREATED)
@@ -36,8 +44,11 @@ public class ApiUserController {
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<ApiResponse> login(@RequestBody User user) {
+	public ResponseEntity<ApiResponse> login(@Valid @RequestBody LoginRequest request) {
 		try {
+			User user = new User();
+			user.setPassword(request.getPassword());
+			user.setEmail(request.getEmail());
 			return ResponseEntity.ok(new ApiResponse("Login successfully", userService.verify(user)));
 		} catch (JwtException e) {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
