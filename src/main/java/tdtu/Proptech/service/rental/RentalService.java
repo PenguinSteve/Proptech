@@ -13,6 +13,7 @@ public interface RentalService {
     Rental uploadRentedProperty(String userEmail, UploadRentedPropertyRequest request);
     Rental updatePendingRentedProperty(Long propertyId, String status);
     Rental getRentalByPropertyId(Long propertyId);
+    Rental getRentalById(Long rentalId);
 
     RentalDTO convertRentalToRentalDTO(Rental rental);
     List<RentalDTO> convertRentalsToRentalsDTO(List<Rental> rentals);

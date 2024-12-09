@@ -22,8 +22,6 @@ public class SalesServiceImpl implements SalesService{
 
     private final SalesRepository salesRepository;
 
-    private final PropertyRepository propertyRepository;
-
     private final ModelMapper modelMapper;
 
     @Override
@@ -50,7 +48,6 @@ public class SalesServiceImpl implements SalesService{
 
         existingProperty.setStatus("PENDING_SOLD");
         Sales sales = createSales(existingProperty, request);
-        System.out.println(sales);
         return salesRepository.save(sales);
     }
 
@@ -94,6 +91,11 @@ public class SalesServiceImpl implements SalesService{
     @Override
     public Sales getSalesByPropertyId(Long propertyId) {
         return salesRepository.findByPropertyId(propertyId).orElseThrow(() -> new RuntimeException("Sales not found!"));
+    }
+
+    @Override
+    public Sales getSalesById(Long salesId) {
+        return salesRepository.findById(salesId).orElseThrow(() -> new RuntimeException("Sales' information not found!"));
     }
 
     @Override

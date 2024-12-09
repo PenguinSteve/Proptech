@@ -23,8 +23,6 @@ public class RentalServiceImpl implements RentalService{
 
     private final RentalRepository rentalRepository;
 
-    private final PropertyRepository propertyRepository;
-
     private final ModelMapper modelMapper;
 
     @Override
@@ -95,6 +93,11 @@ public class RentalServiceImpl implements RentalService{
     @Override
     public Rental getRentalByPropertyId(Long propertyId) {
         return rentalRepository.findByPropertyId(propertyId).orElseThrow(() -> new RuntimeException("Rental not found!"));
+    }
+
+    @Override
+    public Rental getRentalById(Long rentalId) {
+        return rentalRepository.findById(rentalId).orElseThrow(() -> new RuntimeException("Rental's information not found!"));
     }
 
     @Override

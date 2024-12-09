@@ -14,6 +14,7 @@ public interface SalesService {
     Sales uploadSoldProperty(String userEmail, UploadSoldPropertyRequest request);
     Sales updatePendingSoldProperty(Long propertyId, String status);
     Sales getSalesByPropertyId(Long propertyId);
+    Sales getSalesById(Long salesId);
 
     SalesDTO convertSalesToSalesDTO(Sales sales);
     List<SalesDTO> convertListSalesToListSalesDTO(List<Sales> sales);

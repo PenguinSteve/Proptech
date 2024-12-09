@@ -57,7 +57,6 @@ public class DataInitializer {
 			subscriptionRepository.save(starter);
 		}
 		if (!subscriptionRepository.findByPlanName("BASIC").isPresent()) {
-
 			Subscription basic = new Subscription();
 			basic.setPlanName("BASIC");
 			basic.setDurationInDays(30);

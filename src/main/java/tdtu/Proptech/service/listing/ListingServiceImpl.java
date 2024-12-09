@@ -71,10 +71,16 @@ public class ListingServiceImpl implements ListingService{
             throw new RuntimeException("User subscription is not active.");
         }
 
-        long unexpiredPropertiesCount = existingUser.getProperties().stream()
-                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
-                        && ("AVAILABLE".equals(property.getStatus()) || "PENDING_AVAILABLE".equals(property.getStatus())))
-                .count();
+        long unexpiredPropertiesCount;
+        if(existingUser.getProperties() == null || existingUser.getProperties().isEmpty()){
+            unexpiredPropertiesCount = 0L;
+        }
+        else{
+            unexpiredPropertiesCount = existingUser.getProperties().stream()
+                    .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
+                            && ("AVAILABLE".equals(property.getStatus()) || "PENDING_AVAILABLE".equals(property.getStatus())))
+                    .count();
+        }
 
         String planName = existingUser.getSubscription().getPlanName();
         int maxProperties;
