@@ -32,26 +32,17 @@ public class ListingServiceImpl implements ListingService{
 
     @Override
     public List<Property> getAllProperties() {
-        return propertyRepository.findAll().stream()
-                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
-                        && "AVAILABLE".equals(property.getStatus()))
-                .collect(Collectors.toList());
+        return propertyRepository.findByStatusAndExpireAfter("AVAILABLE", LocalDateTime.now());
     }
 
     @Override
     public List<Property> getSalesProperties() {
-        return propertyRepository.findByType("SALES").stream()
-                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
-                        && "AVAILABLE".equals(property.getStatus()))
-                .collect(Collectors.toList());
+        return propertyRepository.findByTypeAndStatusAndExpireAfter("SALES", "AVAILABLE", LocalDateTime.now());
     }
 
     @Override
     public List<Property> getRentalProperties() {
-        return propertyRepository.findByType("RENTAL").stream()
-                .filter(property -> (property.getExpire() == null || property.getExpire().isAfter(LocalDateTime.now()))
-                        && "AVAILABLE".equals(property.getStatus()))
-                .collect(Collectors.toList());
+        return propertyRepository.findByTypeAndStatusAndExpireAfter("RENTAL", "AVAILABLE", LocalDateTime.now());
     }
 
     @Override
@@ -246,7 +237,7 @@ public class ListingServiceImpl implements ListingService{
                 }
                 break;
             case "UNAVAILABLE":
-                existingProperty.setStatus("UNAVAILABLE");
+                    existingProperty.setStatus("UNAVAILABLE");
                 break;
             default:
                 throw new RuntimeException("Invalid property status: " + status);
@@ -284,9 +275,7 @@ public class ListingServiceImpl implements ListingService{
 
     @Override
     public List<Property> getPendingAvailableProperties() {
-        return propertyRepository.findAll().stream()
-                .filter(property -> property.getStatus().startsWith("PENDING_AVAILABLE"))
-                .collect(Collectors.toList());
+        return propertyRepository.findByStatus("PENDING_AVAILABLE");
     }
 
     @Override

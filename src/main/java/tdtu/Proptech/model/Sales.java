@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @AllArgsConstructor @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 @Table(name = "sales")
 public class Sales {
     @Id
@@ -38,4 +38,13 @@ public class Sales {
 
     @Column(nullable = false)
     private String buyerPhone;
-}
+
+    public Sales(Property property, User realtor, LocalDateTime saleDate, Double salePrice, String buyerName, String buyerEmail, String buyerPhone) {
+        this.property = property;
+        this.realtor = realtor;
+        this.saleDate = saleDate;
+        this.salePrice = salePrice;
+        this.buyerName = buyerName;
+        this.buyerEmail = buyerEmail;
+        this.buyerPhone = buyerPhone;
+    }}
