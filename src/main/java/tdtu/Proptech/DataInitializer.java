@@ -30,10 +30,15 @@ public class DataInitializer {
 
 	private void loadDataUsers() {
 		User user = new User();
-		user.setEmail("a@abd.com");
+		user.setEmail("abc");
 		user.setPassword("123456");
 		user.setPhone("1");
 		userService.register(user);
+		User admin = new User();
+		admin.setEmail("admin");
+		admin.setPassword("123456");
+		admin.setPhone("2");
+		userService.register(admin);
 	}
 
 	private void loadSubscription(){

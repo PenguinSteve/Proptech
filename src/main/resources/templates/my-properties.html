@@ -9,9 +9,9 @@
 
                 <nav aria-label="breadcrumb" data-aos="fade-up" data-aos-delay="200">
                     <ol class="breadcrumb text-center justify-content-center">
-                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
                         <li class="breadcrumb-item">
-                            <a href="properties.html">My Properties</a>
+                            <a href="/myProperties">My Properties</a>
                         </li>
 
                     </ol>
@@ -23,32 +23,36 @@
 
 <div class="container-fluid pt-4 px-4">
     <div class="bg-light text-center rounded p-4">
-        <div class="d-flex align-items-center justify-content-end mb-4">
-            <!-- <form class="d-flex justify-content-end ms-4"> -->
-            <!-- <input class="form-control border-0" id="fullName" type="search" placeholder="Search"> -->
-            <a href="/admin/addProduct" id="search" class="pt-1 mx-2 btn btn-primary">
-                <i class="fas fa-plus"></i>
-                Add product
-            </a>
-            <!-- </form> -->
-        </div>
         <div class="table-responsive">
             <table class="table ">
                 <thead>
                     <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Color</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="products">
+                    <tr th:each="property:${properties}">
+                        <td>[[${property.name}]]</td>
+                        <td>[[${property.price}]]</td>
+                        <td>[[${property.address}]]</td>
+                        <td>[[${property.type}]]</td>
+                        <td>[[${property.status}]]</td>
+                        <td th:if="${property.status!='PENDING_AVAILABLE'}">
 
+                            <a th:href="@{'/editProperty/'+${property.id}}" class="btn btn-warning">MODIFY</a>
+                            <a th:href="@{'/sellProcess/'+${property.id}}" class="btn btn-success">SOLD</a>
+                            <a th:href="@{'/rentalProcess/'+${property.id}}" class="btn btn-primary">RENTED</a>
+                        </td>
+                        <td th:unless="${property.status!='PENDING_AVAILABLE'}">
+
+                            <b class="text-danger">Đang chờ admin phê duyệt</b>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end">
