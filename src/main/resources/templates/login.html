@@ -66,6 +66,7 @@
                 alert("Tài khoản hoặc mật khẩu không chính xác")
                 return
             }
+            document.cookie = `token=${apiReponse.data.token}; path=/;`;
             alert("Thành công")
             window.location.href = '/'
         })
