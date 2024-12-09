@@ -30,7 +30,7 @@
       <div class="col-lg-7">
         <div class="img-property-slide-wrap">
           <div class="img-property-slide">
-            <img th:each="image:${property.images}" src="/images/img_1.jpg" alt="Image" class="img-fluid" />
+            <img th:each="image:${property.images}" th:src="@{${image.imageURL}}" alt="Image" class="img-fluid" />
           </div>
         </div>
       </div>

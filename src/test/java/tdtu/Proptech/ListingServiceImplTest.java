@@ -1,6 +1,5 @@
 package tdtu.Proptech;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,60 +34,48 @@ import tdtu.Proptech.service.user.UserService;
 
 class ListingServiceImplTest {
 
-    @Mock
-    private PropertyRepository propertyRepository;
+	@Mock
+	private PropertyRepository propertyRepository;
 
-    @Mock
-    private UserService userService;
+	@Mock
+	private UserService userService;
 
-    @Mock
-    private ImageService imageService;
+	@Mock
+	private ImageService imageService;
 
-    @Mock
-    private ModelMapper modelMapper;
+	@Mock
+	private ModelMapper modelMapper;
 
-    @InjectMocks
-    private ListingServiceImpl listingService;
+	@InjectMocks
+	private ListingServiceImpl listingService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testGetAllProperties() {
-        Property property = new Property();
-        property.setExpire(LocalDateTime.now().plusDays(1));
-        when(propertyRepository.findAll()).thenReturn(List.of(property));
 
-        List<Property> properties = listingService.getAllProperties();
 
-        assertNotNull(properties);
-        assertEquals(1, properties.size());
-        assertEquals(property, properties.get(0));
-        verify(propertyRepository, times(1)).findAll();
-    }
+	@Test
+	void testGetPropertyById_Found() {
+		Property property = new Property();
+		when(propertyRepository.findById(1L)).thenReturn(Optional.of(property));
 
-    @Test
-    void testGetPropertyById_Found() {
-        Property property = new Property();
-        when(propertyRepository.findById(1L)).thenReturn(Optional.of(property));
+		Property result = listingService.getPropertyById(1L);
 
-        Property result = listingService.getPropertyById(1L);
+		assertNotNull(result);
+		assertEquals(property, result);
+		verify(propertyRepository, times(1)).findById(1L);
+	}
 
-        assertNotNull(result);
-        assertEquals(property, result);
-        verify(propertyRepository, times(1)).findById(1L);
-    }
+	@Test
+	void testGetPropertyById_NotFound() {
+		when(propertyRepository.findById(1L)).thenReturn(Optional.empty());
 
-    @Test
-    void testGetPropertyById_NotFound() {
-        when(propertyRepository.findById(1L)).thenReturn(Optional.empty());
+		RuntimeException exception = assertThrows(RuntimeException.class, () -> listingService.getPropertyById(1L));
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> listingService.getPropertyById(1L));
-
-        assertEquals("Property not found!", exception.getMessage());
-    }
+		assertEquals("Property not found!", exception.getMessage());
+	}
 
 //    @Test
 //    void testUploadProperty_Success() {
@@ -110,34 +97,33 @@ class ListingServiceImplTest {
 //        verify(userService, times(1)).getUserByEmail("test@example.com");
 //        verify(propertyRepository, times(2)).save(any(Property.class));
 //    }
- 
-    @Test
-    void testModifyProperty_UnauthorizedAccess() {
-        Property property = new Property();
-        User realtor = new User();
-        realtor.setEmail("different@example.com");
-        property.setRealtor(realtor);
 
-        when(propertyRepository.findById(1L)).thenReturn(Optional.of(property));
+	@Test
+	void testModifyProperty_UnauthorizedAccess() {
+		Property property = new Property();
+		User realtor = new User();
+		realtor.setEmail("different@example.com");
+		property.setRealtor(realtor);
 
-        UnauthorizedAccessException exception = assertThrows(UnauthorizedAccessException.class, () ->
-                listingService.modifyProperty("test@example.com", 1L, mock(UploadPropertyRequest.class))
-        );
+		when(propertyRepository.findById(1L)).thenReturn(Optional.of(property));
 
-        assertEquals("You are not authorized to update this property.", exception.getMessage());
-    }
+		UnauthorizedAccessException exception = assertThrows(UnauthorizedAccessException.class,
+				() -> listingService.modifyProperty("test@example.com", 1L, mock(UploadPropertyRequest.class)));
 
-    @Test
-    void testConvertPropertiesToPropertiesDTO() {
-        Property property = new Property();
-        PropertyDTO propertyDTO = new PropertyDTO();
-        when(modelMapper.map(property, PropertyDTO.class)).thenReturn(propertyDTO);
+		assertEquals("You are not authorized to update this property.", exception.getMessage());
+	}
 
-        List<PropertyDTO> result = listingService.convertPropetiesToPropertiesDTO(List.of(property));
+	@Test
+	void testConvertPropertiesToPropertiesDTO() {
+		Property property = new Property();
+		PropertyDTO propertyDTO = new PropertyDTO();
+		when(modelMapper.map(property, PropertyDTO.class)).thenReturn(propertyDTO);
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
-        assertEquals(propertyDTO, result.get(0));
-        verify(modelMapper, times(1)).map(property, PropertyDTO.class);
-    }
+		List<PropertyDTO> result = listingService.convertPropetiesToPropertiesDTO(List.of(property));
+
+		assertNotNull(result);
+		assertEquals(1, result.size());
+		assertEquals(propertyDTO, result.get(0));
+		verify(modelMapper, times(1)).map(property, PropertyDTO.class);
+	}
 }

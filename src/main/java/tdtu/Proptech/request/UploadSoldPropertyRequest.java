@@ -1,15 +1,15 @@
 package tdtu.Proptech.request;
 
-import lombok.Data;
+import java.time.LocalDate;
 
-import java.time.LocalDateTime;
+import lombok.Data;
 
 @Data
 public class UploadSoldPropertyRequest {
-    private Long propertyId;
-    private LocalDateTime salesDate;
-    private Double salesPrice;
-    private String buyerName;
-    private String buyerEmail;
-    private String buyerPhone;
+	private Long propertyId;
+	private LocalDate salesDate;
+	private Double salesPrice;
+	private String buyerName;
+	private String buyerEmail;
+	private String buyerPhone;
 }

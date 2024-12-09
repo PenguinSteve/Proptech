@@ -15,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import tdtu.Proptech.dto.PropertyDTO;
 import tdtu.Proptech.model.Property;
+import tdtu.Proptech.model.Subscription;
 import tdtu.Proptech.service.listing.ListingService;
+import tdtu.Proptech.service.subscription.SubscriptionService;
 
 @Controller
 @RequestMapping
@@ -23,9 +25,13 @@ import tdtu.Proptech.service.listing.ListingService;
 @RequiredArgsConstructor
 public class HomeController {
 	ListingService listingService;
+	SubscriptionService subscriptionService;
 
 	@GetMapping(value = { "/", "/home", "" })
-	public String index() {
+	public String index(Model model) {
+		List<Property> properties = listingService.getSalesProperties();
+		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
+		model.addAttribute("properties", propertyDTOs);
 		return "index";
 	}
 
@@ -35,6 +41,7 @@ public class HomeController {
 		List<Property> properties = listingService.getSalesProperties();
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
+		model.addAttribute("title", "All Properties");
 		return "properties";
 	}
 
@@ -44,6 +51,8 @@ public class HomeController {
 		List<Property> properties = listingService.getRentalProperties();
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
+		model.addAttribute("title", "Rental Properties");
+
 		return "properties";
 	}
 
@@ -53,6 +62,7 @@ public class HomeController {
 		List<Property> properties = listingService.getSalesProperties();
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
+		model.addAttribute("title", "Sale Properties");
 		return "properties";
 	}
 
@@ -94,6 +104,7 @@ public class HomeController {
 		System.out.println(propertyDTOs);
 		return "my-properties";
 	}
+
 	@GetMapping("/editProperty/{id}")
 	public String myProperty(@PathVariable long id, Model model) {
 		Property property = listingService.getPropertyById(id);
@@ -101,6 +112,7 @@ public class HomeController {
 		model.addAttribute("property", propertyDTO);
 		return "editProperty";
 	}
+
 	@GetMapping("/sellProcess/{id}")
 	public String sellProcess(@PathVariable long id, Model model) {
 		Property property = listingService.getPropertyById(id);
@@ -115,7 +127,9 @@ public class HomeController {
 	}
 
 	@GetMapping("/subscriptions")
-	public String subscriptions() {
+	public String subscriptions(Model model) {
+		List<Subscription> subscriptions = subscriptionService.getAllSubscription();
+		model.addAttribute("subscriptions", subscriptions);
 		return "subscriptions";
 	}
 
