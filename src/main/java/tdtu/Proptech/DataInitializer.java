@@ -32,13 +32,13 @@ public class DataInitializer {
 
 	private void loadDataUsers() {
 		User user = new User();
-		user.setEmail("abc");
+		user.setEmail("test@gmail.com");
 		user.setPassword("123456");
 		user.setPhone("1");
-		if (!userRepository.findByEmail("abc").isPresent())
-			userService.register(user);
+		userService.register(user);
+
 		User admin = new User();
-		admin.setEmail("admin");
+		admin.setEmail("admin@gmail.com");
 		admin.setPassword("123456");
 		admin.setPhone("2");
 		admin.setRole("ADMIN");

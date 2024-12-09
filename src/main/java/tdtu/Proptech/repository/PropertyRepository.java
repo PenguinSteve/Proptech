@@ -6,6 +6,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import tdtu.Proptech.model.Property;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -24,4 +25,8 @@ public interface PropertyRepository extends JpaRepository<Property, Long> {
     List<Property> findByType(String type);
 
     List<Property> findByRealtorEmail(String realtorEmail);
+
+    List<Property> findByStatus(String status);
+    List<Property> findByTypeAndStatusAndExpireAfter(String type, String status, LocalDateTime expire);
+    List<Property> findByStatusAndExpireAfter(String status, LocalDateTime expire);
 }

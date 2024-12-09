@@ -11,6 +11,7 @@ public class UploadPropertyRequest {
     private String address;
     private Double price;
     private String area;
+    private String description;
     private String type;
     private List<MultipartFile> images;
 }
