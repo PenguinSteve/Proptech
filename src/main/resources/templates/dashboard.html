@@ -6,18 +6,30 @@
             <table class="table ">
                 <thead>
                     <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Image</th>
                         <th scope="col">Name</th>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Color</th>
+                        <th scope="col">Adress</th>
                         <th scope="col">Price</th>
+                        <th scope="col">Area (m²)</th>
+                        <th scope="col">Realtor</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="products">
+                    <tr th:each="property:${pendingAvailable}">
+                        <td>[[${property.name}]]</td>
+                        <td>[[${property.address}]]</td>
+                        <td>[[${property.price}]]</td>
+                        <td>[[${property.area}]]</td>
+                        <td>[[${property.realtor.name}]]</td>
+                        <td>
+                            <a th:href="@{'/admin/review/'+${property.id}}"><i
+                                    class="btn fa-solid fa-magnifying-glass"></i></a>
+                            <a href="#" th:onclick="'acceptPendingAvailable('+${property.id}+',\'UNAVAILABLE\')'"><i
+                                    class="btn fa-solid fa-x text-danger"></i></a>
+                            <a href="#" th:onclick="'acceptPendingAvailable('+${property.id}+',\'AVAILABLE\')'"><i
+                                    class="btn fa-solid fa-check text-success"></i></a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end">
@@ -33,18 +45,30 @@
             <table class="table ">
                 <thead>
                     <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Name Property</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Sales Date</th>
+                        <th scope="col">Sales Price</th>
+                        <th scope="col">Buyer Name</th>
+                        <th scope="col">Buyer Email</th>
+                        <th scope="col">Buyer Phone</th>
                         <th scope="col">Action</th>
                     </tr>
                 </thead>
                 <tbody id="products">
+                    <tr th:each="sale:${pedingSold}">
+                        <td scope="col">[[${sale.property.name}]]</td>
+                        <td scope="col">[[${sale.property.address}]]</td>
+                        <td scope="col">[[${sale.salesDate}]]</td>
+                        <td scope="col">[[${sale.salesPrice}]]</td>
+                        <td scope="col">[[${sale.buyerName}]]</td>
+                        <td scope="col">[[${sale.buyerEmail}]]</td>
+                        <td scope="col">[[${sale.buyerPhone}]]</td>
+                        <td scope="col">
+                            <a href="#"><i class="btn fa-solid fa-x text-danger"></i></a>
+                            <a href="#"><i class="btn fa-solid fa-check text-success"></i></a>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
             <div class="d-flex justify-content-end">
@@ -82,3 +106,30 @@
 </div>
 
 <div th:replace="~{/layout/admin/footer}"></div>
+<script>
+    async function acceptPendingAvailable(id, status) {
+        let response = await fetch(`/api/listing/admin/pending/${id}/status?status=${status}`, { method: "PUT" })
+        let apiReponse = await response.json()
+        if (apiReponse.data != null) {
+            alert("Thành công")
+            return
+        }
+        alert("Không thành công")
+    }
+    $(document).ready(async function () {
+
+    })
+    async function acceptPendingSold(id, status) {
+        let response = await fetch(`/api/sales/admin/pending/sales/{propertyId}/status?status=${status}`, { method: "PUT" })
+        let apiReponse = await response.json()
+        if (apiReponse.data != null) {
+            alert("Thành công")
+            return
+        }
+        alert("Không thành công")
+    }
+    $(document).ready(async function () {
+
+    })
+
+</script>

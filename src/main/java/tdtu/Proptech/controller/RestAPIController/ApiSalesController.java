@@ -53,6 +53,7 @@ public class ApiSalesController {
     @PostMapping("/realtor/upload")
     @PreAuthorize("hasRole('REALTOR')")
     public ResponseEntity<ApiResponse> uploadSoldProperty(@RequestBody UploadSoldPropertyRequest request) {
+    	System.out.println(request);
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             String currentEmail = authentication.getName();
@@ -69,7 +70,7 @@ public class ApiSalesController {
 
     @PutMapping("/admin/pending/sales/{propertyId}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updatePendingSoldProperty(@PathVariable Long propertyId, @RequestBody String status){
+    public ResponseEntity<ApiResponse> updatePendingSoldProperty(@PathVariable Long propertyId, @RequestParam String status){
         try{
             if(!"UNAVAILABLE".equals(status) && !"SOLD".equals(status)){
                 throw new RuntimeException("This API does not support status other than UNAVAILABLE and SOLD.");

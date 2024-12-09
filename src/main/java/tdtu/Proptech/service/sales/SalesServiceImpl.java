@@ -50,6 +50,7 @@ public class SalesServiceImpl implements SalesService{
 
         existingProperty.setStatus("PENDING_SOLD");
         Sales sales = createSales(existingProperty, request);
+        System.out.println(sales);
         return salesRepository.save(sales);
     }
 

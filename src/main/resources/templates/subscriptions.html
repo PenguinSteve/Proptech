@@ -7,68 +7,25 @@
             <div class="col-lg-12 mx-auto shadow rounded bg-white p-4">
                 <div class="row">
                     <!-- Basic Membership -->
-                    <div class="col-lg-4 p-3">
+                    <div th:each="subscription:${subscriptions}" class="col-lg-4 p-3">
                         <div class="border rounded p-4 text-center">
-                            <h3>Hội viên Cơ bản</h3>
+                            <h3>[[${subscription.planName}]]</h3>
                             <p>Phù hợp với môi giới mới hoặc giỏ hàng nhỏ</p>
                             <p class="text-muted">
-                                từ <strong>499.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
-                                Tiết kiệm đến 190.000 đ mỗi tháng
+                                từ <strong>[[${subscription.price}]] đ/tháng</strong>
                             </p>
 
                             <h5 class="text-primary">Gói tin hàng tháng</h5>
-                            <ul class="list-unstyled text-start">
-                                <li>1 Tin VIP Vàng (hiển thị 7 ngày)</li>
-                                <li>1 Tin VIP Bạc (hiển thị 7 ngày)</li>
-                                <li>15 Tin Thường (hiển thị 10 ngày)</li>
-                                <li>15 lượt đẩy cho Tin Thường</li>
-                            </ul>
-                            <button class="btn btn-primary w-100 mt-4"
+                            <p>[[${subscription.benefits}]]</p>
+
+                            <button th:if="${subscription.planName=='STARTER'}" class="btn btn-primary w-100 mt-4"
+                                disabled>Gói
+                                dùng thử</button>
+                            <button th:unless="${subscription.planName=='STARTER'}" class="btn btn-primary w-100 mt-4"
                                 onclick="showPurchaseForm('Hội viên Cơ bản', 499000)">Mua ngay</button>
                         </div>
                     </div>
                     <!-- Standard Membership -->
-                    <div class="col-lg-4 p-3">
-                        <div class="border rounded p-4 text-center">
-                            <h3>Hội viên Tiêu chuẩn</h3>
-                            <p>Phù hợp với môi giới mới hoặc giỏ hàng nhỏ</p>
-                            <p class="text-muted">
-                                từ <strong>999.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
-                                Tiết kiệm đến 228.000 đ mỗi tháng
-                            </p>
-
-                            <h5 class="text-primary">Gói tin hàng tháng</h5>
-                            <ul class="list-unstyled text-start">
-                                <li>2 Tin VIP Vàng (hiển thị 7 ngày)</li>
-                                <li>2 Tin VIP Bạc (hiển thị 7 ngày)</li>
-                                <li>20 Tin Thường (hiển thị 10 ngày)</li>
-                                <li>20 lượt đẩy cho Tin Thường</li>
-                            </ul>
-                            <button class="btn btn-primary w-100 mt-4"
-                                onclick="showPurchaseForm('Hội viên Tiêu chuẩn', 999000)">Mua ngay</button>
-                        </div>
-                    </div>
-                    <!-- Premium Membership -->
-                    <div class="col-lg-4 p-3">
-                        <div class="border rounded p-4 text-center">
-                            <h3>Hội viên Cao cấp</h3>
-                            <p>Phù hợp với môi giới chuyên nghiệp</p>
-                            <p class="text-muted">
-                                từ <strong>1999.000 đ/tháng</strong> <span class="text-danger">(-20%)</span><br>
-                                Tiết kiệm đến 328.000 đ mỗi tháng
-                            </p>
-
-                            <h5 class="text-primary">Gói tin hàng tháng</h5>
-                            <ul class="list-unstyled text-start">
-                                <li>3 Tin VIP Vàng (hiển thị 7 ngày)</li>
-                                <li>3 Tin VIP Bạc (hiển thị 7 ngày)</li>
-                                <li>30 Tin Thường (hiển thị 10 ngày)</li>
-                                <li>30 lượt đẩy cho Tin Thường</li>
-                            </ul>
-                            <button class="btn btn-primary w-100 mt-4"
-                                onclick="showPurchaseForm('Hội viên Cao cấp', 1999000)">Mua ngay</button>
-                        </div>
-                    </div>
                     <!-- Purchase Form -->
                     <div id="purchase-form" class="row align-items-center mt-5 d-none">
                         <div class="col-lg-6 mx-auto shadow rounded bg-white p-4">

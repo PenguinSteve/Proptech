@@ -35,14 +35,15 @@ public class DataInitializer {
 		user.setEmail("test@gmail.com");
 		user.setPassword("123456");
 		user.setPhone("1");
-		userService.register(user);
 
+		if (!userRepository.findByEmail("test@gmail.com").isPresent())
+			userService.register(user);
 		User admin = new User();
 		admin.setEmail("admin@gmail.com");
 		admin.setPassword("123456");
 		admin.setPhone("2");
 		admin.setRole("ADMIN");
-		if (!userRepository.findByEmail("admin").isPresent())
+		if (!userRepository.findByEmail("admin@gmail.com").isPresent())
 			userRepository.save(admin);
 	}
 
