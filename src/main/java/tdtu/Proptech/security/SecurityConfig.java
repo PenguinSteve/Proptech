@@ -1,15 +1,13 @@
 package tdtu.Proptech.security;
 
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,6 +28,7 @@ import tdtu.Proptech.security.jwt.JwtFilter;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     @Bean
     public ModelMapper modelMapper() {
@@ -42,13 +41,11 @@ public class SecurityConfig {
         return new Cloudinary(dotenv.get("CLOUDINARY_URL"));
     }
 
-    @Autowired
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtFilter jwtFilter;
-    @Autowired
-	JwtCookieToHeaderFilter cookieToHeaderFilter;
+    private final JwtFilter jwtFilter;
+
+	private final JwtCookieToHeaderFilter cookieToHeaderFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
