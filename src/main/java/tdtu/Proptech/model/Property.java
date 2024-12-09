@@ -28,6 +28,8 @@ public class Property {
 
     private String area;
 
+    private String description;
+
     @Column(nullable = false)
     private String type; // SALES, RENTAL
 
@@ -44,11 +46,12 @@ public class Property {
     @OneToMany(mappedBy = "property", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images;
 
-    public Property (String name, String address, Double price, String area, String type, String status, User realtor, LocalDateTime expire){
+    public Property (String name, String address, Double price, String area, String description, String type, String status, User realtor, LocalDateTime expire){
         this.name = name;
         this.address = address;
         this.price = price;
         this.area = area;
+        this.description = description;
         this.type = type;
         this.status = status;
         this.realtor = realtor;

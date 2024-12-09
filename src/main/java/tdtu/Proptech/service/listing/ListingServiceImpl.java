@@ -112,6 +112,7 @@ public class ListingServiceImpl implements ListingService{
                 request.getAddress(),
                 request.getPrice(),
                 request.getArea(),
+                request.getDescription(),
                 request.getType(),
                 "PENDING_AVAILABLE",
                 existingUser,
@@ -183,6 +184,7 @@ public class ListingServiceImpl implements ListingService{
         existingProperty.setName(request.getName());
         existingProperty.setPrice(request.getPrice());
         existingProperty.setArea(request.getArea());
+        existingProperty.setDescription(request.getDescription());
         existingProperty.setType(request.getType());
         existingProperty.setStatus("PENDING_AVAILABLE");
 
