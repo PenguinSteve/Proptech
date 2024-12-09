@@ -1,7 +1,5 @@
 package tdtu.Proptech.security;
 
-import com.cloudinary.Cloudinary;
-import io.github.cdimascio.dotenv.Dotenv;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +18,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.cloudinary.Cloudinary;
+
+import io.github.cdimascio.dotenv.Dotenv;
+import tdtu.Proptech.security.jwt.JwtCookieToHeaderFilter;
 import tdtu.Proptech.security.jwt.JwtFilter;
 
 @Configuration
@@ -41,6 +44,8 @@ public class SecurityConfig {
 
     @Autowired
     private JwtFilter jwtFilter;
+    @Autowired
+	JwtCookieToHeaderFilter cookieToHeaderFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder(){
@@ -49,7 +54,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+    	return
+    			http
+         		.addFilterBefore(cookieToHeaderFilter, UsernamePasswordAuthenticationFilter.class)
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
                     .requestMatchers("/api/user/login", "/api/user/register", "/api/order").permitAll()
