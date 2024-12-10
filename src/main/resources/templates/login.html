@@ -67,7 +67,6 @@
                 return
             }
             document.cookie = `token=${apiReponse.data.token}; path=/;`;
-            alert("Thành công")
             if (apiReponse.data.user.role == "REALTOR") {
                 window.location.href = '/'
                 return

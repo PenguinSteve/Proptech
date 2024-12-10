@@ -68,7 +68,7 @@ public class ApiRentalController {
 
     @PutMapping("/admin/pending/rental/{propertyId}/status")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ApiResponse> updatePendingRentedProperty(@PathVariable Long propertyId, @RequestBody String status){
+    public ResponseEntity<ApiResponse> updatePendingRentedProperty(@PathVariable Long propertyId, @RequestParam String status){
         try{
             if(!"UNAVAILABLE".equals(status) && !"RENTED".equals(status)){
                 throw new RuntimeException("This API does not support status other than UNAVAILABLE and RENTED.");
@@ -76,7 +76,7 @@ public class ApiRentalController {
             Rental rental = rentalService.updatePendingRentedProperty(propertyId, status);
 
             if(rental == null){
-                return ResponseEntity.ok(new ApiResponse("Property was canceled successfully", null));
+                return ResponseEntity.ok(new ApiResponse("Property was canceled successfully", true));
             }
             return ResponseEntity.ok(new ApiResponse("Property was approved successfully", rentalService.convertRentalToRentalDTO(rental)));
         }

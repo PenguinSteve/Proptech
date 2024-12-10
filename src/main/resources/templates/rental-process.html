@@ -76,57 +76,87 @@
             <form id="form-section">
                 <div class="mb-3">
                     <label class="form-label">Tên bất động sản</label>
-                    <input type="text" class="form-control" id="name" readonly>
+                    <input type="text" class="form-control" id="name" th:value="${property.name}" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Địa chỉ</label>
-                    <input type="text" class="form-control" id="address" readonly>
+                    <input type="text" class="form-control" id="address" th:value="${property.address}" readonly>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Giá thuê</label>
-                    <input type="number" class="form-control" id="address" readonly>
+                    <input type="number" name="rentalPrice" class="form-control" id="address"
+                        th:value="${property.price}" readonly>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label">Hạn thuê</label>
-                    <input type="date" class="form-control" id="address">
+                    <label class="form-label">Hạn thuê (Ngày)</label>
+                    <input type="number" name="rentalDuration" class="form-control" min="1" id="address"
+                        placeholder="Nhập số ngày thuê">
                 </div>
 
                 <h5>Thông tin người thuê</h5>
                 <div class="mb-3">
                     <label class="form-label">Tên </label>
-                    <input type="text" class="form-control" id="area" min="0" placeholder="Nhập tên người mua">
+                    <input type="text" name="renterName" class="form-control" id="area" min="0"
+                        placeholder="Nhập tên người mua" required>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email </label>
-                    <input type="email" class="form-control" id="area" min="0" placeholder="Nhập email người mua">
+                    <input type="email" name="renterEmail" required class="form-control" id="area" min="0"
+                        placeholder="Nhập email người mua">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Số điện thoại </label>
-                    <input type="number" class="form-control" id="area" min="0" placeholder="Nhập tên người mua">
+                    <input type="number" name="renterPhone" required class="form-control" id="area" min="0"
+                        placeholder="Nhập tên người mua">
+                </div>
+                <input type="hidden" name="propertyId" th:value="${property.id}">
+                <input type="hidden" name="price" th:value="${property.price}">
+                <div class="bg-white p-3 text-center rounded-bottom">
+                    <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
                 </div>
             </form>
         </div>
 
-        <!-- Footer -->
-        <div class="bg-white p-3 text-center rounded-bottom">
-            <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
-        </div>
+
     </div>
 
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/jquery-1.11.0.min.js"></script>
     <script>
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (const cookie of cookies) {
+                const [key, value] = cookie.split('=');
+                if (key === name) {
+                    return decodeURIComponent(value);
+                }
+            }
+            return null;
+        }
         document.addEventListener('DOMContentLoaded', () => {
             $('form#form-section').submit(async function (e) {
                 e.preventDefault()
-                let imageFiles = [];
-                const address = document.getElementById('address').value.trim();
-                const propertyType = document.getElementById('propertyType').value.trim();
-                const area = document.getElementById('area').value.trim();
-                const price = document.getElementById('price').value.trim();
-
-                if (!address || !propertyType || !area || !price) {
-                    alert('Vui lòng điền đầy đủ thông tin trước khi tiếp tục.');
-                    return;
+                let propertyId = $('input[name=propertyId]').val()
+                let rentalDate = new Date
+                let rentalPrice = $('input[name=rentalPrice]').val()
+                let rentalDuration = $('input[name=rentalDuration]').val()
+                let renterName = $('input[name=renterName]').val()
+                let renterEmail = $('input[name=renterEmail]').val()
+                let renterPhone = $('input[name=renterPhone]').val()
+                let token = getCookie('token')
+                let response = await fetch("/api/rental/realtor/upload", {
+                    method: "POST", body: JSON.stringify({ propertyId, rentalDate, rentalPrice, rentalDuration, renterEmail, renterName, renterPhone }), headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                })
+                let apiResponse = await response.json()
+                if (apiResponse.data == null) {
+                    alert("Yêu cầu  không thành công")
+                    return
                 }
+                alert("Thành công")
+                window.location.href = "/myProperties"
             })
 
 

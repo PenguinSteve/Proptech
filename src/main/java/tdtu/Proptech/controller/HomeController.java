@@ -124,8 +124,11 @@ public class HomeController {
 		return "sell-process";
 	}
 
-	@GetMapping("/rentalProcess")
-	public String rentalProcess() {
+	@GetMapping("/rentalProcess/{id}")
+	public String rentalProcess(@PathVariable long id,Model model) {
+		Property property = listingService.getPropertyById(id);
+		PropertyDTO propertyDTO = listingService.converPropertyToPropertyDTO(property);
+		model.addAttribute("property", propertyDTO);
 		return "rental-process";
 	}
 

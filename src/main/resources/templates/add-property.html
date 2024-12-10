@@ -1,159 +1,162 @@
-<!DOCTYPE html>
-<html lang="vi">
+<div th:replace="~{/layout/header}"></div>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thêm Bài đăng</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .bg-primary {
-            background-color: #005555 !important;
-        }
+<div class="hero page-inner overlay" style="background-image: url('/images/hero_bg_1.jpg')">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading">Thêm tin bất động sản</h1>
 
-        .btn-outline-light {
-            border-color: #005555 !important;
-            color: #005555 !important;
-        }
-
-        .btn-outline-light:hover {
-            background-color: #005555 !important;
-            color: white !important;
-        }
-
-        .text-primary {
-            color: #005555 !important;
-        }
-
-        .border-primary {
-            border-color: #005555 !important;
-        }
-
-        .btn-primary {
-            background-color: #005555 !important;
-            border-color: #005555 !important;
-        }
-
-        .btn-primary:hover {
-            background-color: #005555 !important;
-            border-color: #005555 !important;
-        }
-
-        .progress-bar {
-            background-color: #005555 !important;
-        }
-
-        .card:hover {
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transform: scale(1.02);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .btn-lg {
-            height: 50px;
-            font-size: 1.2rem;
-        }
-    </style>
-</head>
-
-<body class="bg-light">
-    <div class="container my-5">
-        <!-- Header -->
-        <div class="bg-primary text-white p-3 rounded-top">
-            <div class="d-flex justify-content-between align-items-center">
-                <h4 class="mb-0" id="step-title">Tạo tin</h4>
-                <button class="btn btn-outline-light btn-sm">
-                    <a href="/" class="text-decoration-none text-light">Thoát</a>
-                </button>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">
+                            Create Properties
+                        </li>
+                    </ol>
+                </nav>
             </div>
         </div>
+    </div>
+</div>
+<style>
+    .bg-primary {
+        background-color: #005555 !important;
+    }
 
+    .btn-outline-light {
+        border-color: #005555 !important;
+        color: #005555 !important;
+    }
 
+    .btn-outline-light:hover {
+        background-color: #005555 !important;
+        color: white !important;
+    }
 
-        <!-- Nội dung -->
-        <div class="bg-white p-4" id="step-content">
+    .text-primary {
+        color: #005555 !important;
+    }
 
-            <form id="form-section">
-                <div class="mb-3">
-                    <label class="form-label">Tên bất động sản</label>
-                    <input type="text" name="name" class="form-control" id="name" placeholder="Nhập tên" required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Địa chỉ</label>
-                    <input type="text" name="address" class="form-control" id="address" placeholder="Nhập địa chỉ"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Loại bất động sản</label>
-                    <select class="form-select" name="type" id="propertyType">
-                        <option selected value="RENTAL">Cho thuê</option>
-                        <option value="SALES">Bán</option>
-                    </select>
+    .border-primary {
+        border-color: #005555 !important;
+    }
 
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Diện tích (m²)</label>
-                    <input type="number" name="area" class="form-control" id="area" min="0" placeholder="Nhập diện tích"
-                        required>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Giá</label>
-                    <div class="input-group">
-                        <input type="number" name="price" class="form-control" id="price" min="0" placeholder="Nhập giá"
-                            required>
-                        <span class="input-group-text">VNĐ</span>
-                    </div>
-                </div>
-                <h5 class="mb-3 text-primary mt-3 mb-3 ">Thêm hình ảnh</h5>
-                <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
-                <div class="mb-3">
-                    <input type="file" name="images" class="form-control" id="image-upload" required multiple
-                        accept="image/*">
-                </div>
-                <div class="bg-white p-3 text-center rounded-bottom">
-                    <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
-                </div>
-            </form>
+    .btn-primary {
+        background-color: #005555 !important;
+        border-color: #005555 !important;
+    }
+
+    .btn-primary:hover {
+        background-color: #005555 !important;
+        border-color: #005555 !important;
+    }
+
+    .progress-bar {
+        background-color: #005555 !important;
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transform: scale(1.02);
+        transition: all 0.3s ease-in-out;
+    }
+
+    .btn-lg {
+        height: 50px;
+        font-size: 1.2rem;
+    }
+</style>
+<div class="container my-5">
+    <!-- Header -->
+    <div class="bg-primary text-white p-3 rounded-top">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0 text-white" id="step-title">Tạo tin</h4>
+            <button class="btn btn-outline-light btn-sm">
+                <a href="/" class="text-decoration-none text-light">Thoát</a>
+            </button>
         </div>
-
-        <!-- Footer -->
     </div>
 
-    <script src="/js/bootstrap.bundle.min.js"></script>
-    <script src="/js/jquery-1.11.0.min.js"></script>
-    <script>
-        function getCookie(name) {
-            const cookies = document.cookie.split('; ');
-            for (const cookie of cookies) {
-                const [key, value] = cookie.split('=');
-                if (key === name) {
-                    return decodeURIComponent(value);
-                }
+
+
+    <!-- Nội dung -->
+    <div class="bg-white p-4" id="step-content">
+
+        <form id="form-section">
+            <div class="mb-3">
+                <label class="form-label">Tên bất động sản</label>
+                <input type="text" name="name" class="form-control" id="name" placeholder="Nhập tên" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Địa chỉ</label>
+                <input type="text" name="address" class="form-control" id="address" placeholder="Nhập địa chỉ" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Loại bất động sản</label>
+                <select class="form-select" name="type" id="propertyType">
+                    <option selected value="RENTAL">Cho thuê</option>
+                    <option value="SALES">Bán</option>
+                </select>
+
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Diện tích (m²)</label>
+                <input type="number" name="area" class="form-control" id="area" min="0" placeholder="Nhập diện tích"
+                    required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Giá</label>
+                <div class="input-group">
+                    <input type="number" name="price" class="form-control" id="price" min="0" placeholder="Nhập giá"
+                        required>
+                    <span class="input-group-text">VNĐ</span>
+                </div>
+            </div>
+            <h5 class="mb-3 text-primary mt-3 mb-3 ">Thêm hình ảnh</h5>
+            <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
+            <div class="mb-3">
+                <input type="file" name="images" class="form-control" id="image-upload" required multiple
+                    accept="image/*">
+            </div>
+            <div class="bg-white p-3 text-center rounded-bottom">
+                <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+</div>
+<div th:replace="~{/layout/footer}"></div>
+<script>
+    function getCookie(name) {
+        const cookies = document.cookie.split('; ');
+        for (const cookie of cookies) {
+            const [key, value] = cookie.split('=');
+            if (key === name) {
+                return decodeURIComponent(value);
             }
-            return null;
         }
-        document.addEventListener('DOMContentLoaded', () => {
-            $('form#form-section').submit(async function (e) {
-                e.preventDefault()
-                let form = e.target
-                let formData = new FormData(form)
-                let token = getCookie('token')
-                let response = await fetch("/api/listing/realtor", {
-                    method: "POST", body: formData, headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                })
-                let apiResponse = await response.json()
-                if (apiResponse.data == null) {
-                    alert("Thêm bài  không thành công")
-                    return
+        return null;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+        $('form#form-section').submit(async function (e) {
+            e.preventDefault()
+            let form = e.target
+            let formData = new FormData(form)
+            let token = getCookie('token')
+            let response = await fetch("/api/listing/realtor", {
+                method: "POST", body: formData, headers: {
+                    'Authorization': `Bearer ${token}`
                 }
-                alert("Thêm bài thành công")
-                window.location.href = "/"
+            })
+            let apiResponse = await response.json()
+            if (apiResponse.data == null) {
+                alert("Thêm bài  không thành công")
+                return
+            }
+            alert("Thêm bài thành công")
+            window.location.href = "/"
 
-            });
-        })
-    </script>
-</body>
-
-</html>
+        });
+    })
+</script>
