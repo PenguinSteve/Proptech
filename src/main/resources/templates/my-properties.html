@@ -44,9 +44,12 @@
                         <td>[[${property.status}]]</td>
                         <td th:if="${property.status=='AVAILABLE'}">
 
-                            <a th:href="@{'/editProperty/'+${property.id}}" class="btn btn-warning p-2 my-0">MODIFY</a>
-                            <a th:href="@{'/sellProcess/'+${property.id}}" class="btn btn-success p-2 my-0">SOLD</a>
-                            <a th:href="@{'/rentalProcess/'+${property.id}}" class="btn btn-primary p-2 my-0">RENTED</a>
+                            <a th:href="@{'/editProperty/'+${property.id}}"><i
+                                    class="text-warning shadow border btn p-2 mx-2 fa-solid fa-pen"></i></a>
+                            <a th:if="${property.type=='SALES'}" th:href="@{'/sellProcess/'+${property.id}}"><i
+                                    class="text-success shadow border btn p-2 mx-2 fa-solid fa-money-bill"></i></a>
+                            <a th:unless="${property.type=='SALES'}" th:href="@{'/rentalProcess/'+${property.id}}"><i
+                                    class="text-primary shadow border btn p-2 mx-2 fa-solid fa-money-bill"></i></a>
                         </td>
                         <td
                             th:if="${property.status=='PENDING_AVAILABLE' || property.status=='PENDING_SOLD'||property.status=='PENDING_RENTAL'}">
@@ -54,8 +57,9 @@
                             <b class="text-danger">Đang chờ admin phê duyệt</b>
                         </td>
                         <td th:if="${property.status=='UNAVAILABLE'}">
+                            <a th:href="@{'/editProperty/'+${property.id}}"><i
+                                    class="text-warning shadow border btn p-2 mx-2 fa-solid fa-pen"></i></a>
 
-                            <b class="text-secondary">Không khả dụng</b>
                         </td>
                     </tr>
                 </tbody>

@@ -1,6 +1,8 @@
 package tdtu.Proptech.controller;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -142,6 +144,14 @@ public class HomeController {
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
 		return "search";
+	}
+
+	@GetMapping("/payment/{subsriptionId}")
+	public String payment(@PathVariable long subsriptionId, Model model) {
+		Subscription subscription = subscriptionService.getSubscriptionById(subsriptionId);
+		model.addAttribute("subscription", subscription);
+		model.addAttribute("price", NumberFormat.getInstance(new Locale("vi", "VN")).format(subscription.getPrice()));
+		return "payment";
 	}
 
 	@GetMapping("/subscriptions")

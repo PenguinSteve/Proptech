@@ -1,0 +1,124 @@
+<div th:replace="~{/layout/header}"></div>
+
+<style>
+    .payment-container {
+        max-width: 800px;
+        margin: 20px auto;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-info,
+    .payment-method {
+        padding: 10px;
+    }
+
+    .card-input {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+    }
+</style>
+<div class="hero page-inner overlay" style="background-image: url('images/hero_bg_1.jpg')">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-9 text-center mt-5">
+                <h1 class="heading">Cổng thanh toán</h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb text-center justify-content-center">
+                        <li class="breadcrumb-item text-white"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item active text-white-50" aria-current="page">
+                            Payment
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container payment-container">
+    <div class="row">
+        <!-- Order Information -->
+        <div class="col-md-6 order-info">
+            <h5 class="text-primary">Thông tin đơn hàng</h5>
+            <p><strong>Hệ thống:</strong> Zing</p>
+            <p><strong>Hình thức thanh toán:</strong> Banking Payment</p>
+            <p><strong>Giá trị đơn hàng:</strong> <span class="text-danger">đ[[${price}]]</span></p>
+            <p><strong>Mã giao dịch:</strong> 2412100031201</p>
+            <p><strong>Nội dung:</strong> Thanh toán hóa đơn gói hội viên "[[${subscription.planName}]]" </p>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="col-md-6 payment-method">
+            <ul class="nav nav-tabs" id="paymentTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="atm-tab" data-bs-toggle="tab" data-bs-target="#atm"
+                        type="button" role="tab" aria-controls="atm" aria-selected="true">Thẻ ATM</button>
+                </li>
+            </ul>
+            <div class="tab-content mt-3" id="paymentTabsContent">
+                <!-- ATM Payment -->
+                <div class="tab-pane fade show active" id="atm" role="tabpanel" aria-labelledby="atm-tab">
+                    <div class="card-input">
+                        <label for="cardNumber" class="form-label">Số thẻ</label>
+                        <input type="text" id="cardNumber" required class="form-control mb-3" placeholder="Nhập số thẻ">
+
+                        <label for="cardName" class="form-label">Tên trên thẻ (không dấu)</label>
+                        <input type="text" id="cardName" required class="form-control mb-3"
+                            placeholder="Nhập tên trên thẻ">
+                        <form id="payment-form">
+                            <input type="hidden" name="subscriptionId" th:value="${subscription.id}">
+                            <input type="hidden" name="amount" th:value="${subscription.price}">
+                            <button class="btn btn-primary w-100">Thanh toán đ[[${price}]]</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{/layout/footer}"></div>
+<script>
+    function getCookie(name) {
+        const cookies = document.cookie.split('; ');
+        for (const cookie of cookies) {
+            const [key, value] = cookie.split('=');
+            if (key === name) {
+                return decodeURIComponent(value);
+            }
+        }
+        return null;
+    }
+    $(document).ready(() => {
+        $('#payment-form').submit(async function (e) {
+            e.preventDefault()
+            let subscriptionId = $('input[name=subscriptionId]').val()
+            let amount = $('input[name=amount]').val()
+            let paymentDate = new Date()
+            let paymentMethod = "CREDIT_CARD"
+            let token = getCookie("token")
+            let response = await fetch("/api/payment/assign-subscription", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${token}`
+
+                },
+                body: JSON.stringify({ subscriptionId, amount, paymentDate, paymentMethod })
+            })
+            console.log(response)
+            let apiResponse = await response.json()
+            if (apiResponse.data != null) {
+                alert("Cảm ơn đã thanh toán")
+                window.location.href = "/"
+                return
+            }
+            alert("Không thể chỉ định đăng ký mới vì đăng ký hiện tại chưa kết thúc.")
+            window.location.href = '/subscriptions'
+        })
+    })
+</script>
