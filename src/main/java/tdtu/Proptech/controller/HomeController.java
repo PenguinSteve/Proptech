@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -124,6 +125,23 @@ public class HomeController {
 	@GetMapping("/rentalProcess")
 	public String rentalProcess() {
 		return "rental-process";
+	}
+
+	@GetMapping("/search")
+	public String search(@RequestParam(required = false) String type, @RequestParam(required = false) String priceRange,
+			@RequestParam(required = false) String name, @RequestParam(required = false) String address, Model model) {
+		model.addAttribute("title", "Searching for \"" + address + "\"");
+		Double minPrice = null;
+		Double maxPrice = null;
+		if (priceRange != null && !priceRange.isEmpty()) {
+			String[] priceParts = priceRange.split("-");
+			minPrice = !priceParts[0].isEmpty() ? Double.valueOf(priceParts[0]) : null;
+			maxPrice = priceParts.length > 1 && !priceParts[1].isEmpty() ? Double.valueOf(priceParts[1]) : null;
+		}
+		List<Property> properties = listingService.getPropertiesByCriteria(type, minPrice, maxPrice, name, address);
+		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
+		model.addAttribute("properties", propertyDTOs);
+		return "search";
 	}
 
 	@GetMapping("/subscriptions")

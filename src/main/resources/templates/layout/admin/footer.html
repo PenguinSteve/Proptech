@@ -27,27 +27,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!-- <script>
-    function getCookie(name) {
-        const cookies = document.cookie.split('; ');
-        for (const cookie of cookies) {
-            const [key, value] = cookie.split('=');
-            if (key === name) {
-                return decodeURIComponent(value);
-            }
-        }
-        return null;
-    }
-    if (getCookie('token') != null) {
-        $("#my-account").html(`<a href="#" id="logout" class=" rounded-pill text-reset text-decoration-none bg-light p-2 mx-1">
-                                    Logout <i class="fa-solid fa-right-from-bracket "></i>
-                                </a>`)
-        $("#logout").click(() => {
-            document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            window.location.href = "/login"
-        })
-    }
-</script> -->
+<script>
+    $("#logout").click(() => {
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.href = "/login"
+    })
+</script>
 </body>
 
 </html>

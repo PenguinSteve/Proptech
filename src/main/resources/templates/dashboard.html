@@ -65,8 +65,10 @@
                         <td scope="col">[[${sale.buyerEmail}]]</td>
                         <td scope="col">[[${sale.buyerPhone}]]</td>
                         <td scope="col">
-                            <a href="#"><i class="btn fa-solid fa-x text-danger"></i></a>
-                            <a href="#"><i class="btn fa-solid fa-check text-success"></i></a>
+                            <a href="#" th:onclick="'acceptPendingSold('+${sale.property.id}+',\'UNAVAILABLE\')'"><i
+                                    class="btn fa-solid fa-x text-danger"></i></a>
+                            <a href="#" th:onclick="'acceptPendingSold('+${sale.property.id}+',\'SOLD\')'"><i
+                                    class="btn fa-solid fa-check text-success"></i></a>
                         </td>
                     </tr>
                 </tbody>
@@ -112,6 +114,7 @@
         let apiReponse = await response.json()
         if (apiReponse.data != null) {
             alert("Thành công")
+            window.location.href = "/admin"
             return
         }
         alert("Không thành công")
@@ -120,9 +123,10 @@
 
     })
     async function acceptPendingSold(id, status) {
-        let response = await fetch(`/api/sales/admin/pending/sales/{propertyId}/status?status=${status}`, { method: "PUT" })
+        let response = await fetch(`/api/sales/admin/pending/sales/${id}/status?status=${status}`, { method: "PUT" })
         let apiReponse = await response.json()
         if (apiReponse.data != null) {
+            window.location.href = "/admin"
             alert("Thành công")
             return
         }

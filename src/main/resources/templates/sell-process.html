@@ -85,25 +85,28 @@
                 <input type="hidden" name="propertyId" th:value="${property.id}">
                 <div class="mb-3">
                     <label class="form-label">Ngày bán</label>
-                    <input type="date" name="salesDate" class="form-control" id="address" placeholder="Nhập ngày bán">
+                    <input type="date" required name="salesDate" class="form-control" id="address"
+                        placeholder="Nhập ngày bán">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Giá bán</label>
-                    <input type="number" name="salesPrice" class="form-control" id="address" placeholder="Nhập giá bán">
+                    <input type="number" name="salesPrice" required class="form-control" id="address"
+                        placeholder="Nhập giá bán">
                 </div>
                 <h5>Thông tin người mua</h5>
                 <div class="mb-3">
                     <label class="form-label">Tên </label>
-                    <input type="text" name="buyerName" class="form-control" id="area" placeholder="Nhập tên người mua">
+                    <input type="text" name="buyerName" required class="form-control" id="area"
+                        placeholder="Nhập tên người mua">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Email </label>
-                    <input type="email" name="buyerEmail" class="form-control" id="area"
+                    <input type="email" name="buyerEmail" required class="form-control" id="area"
                         placeholder="Nhập email người mua">
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Số điện thoại </label>
-                    <input type="text" name="buyerPhone" class="form-control" id="area"
+                    <input type="text" name="buyerPhone" required class="form-control" id="area"
                         placeholder="Nhập tên người mua">
                 </div>
                 <div class="bg-white p-3 text-center rounded-bottom">

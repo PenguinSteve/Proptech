@@ -74,6 +74,7 @@
         <div class="bg-white p-4" id="step-content">
 
             <form id="form-section">
+                <input type="hidden" name="property-id" th:value="${property.id}">
                 <div class="mb-3">
                     <label class="form-label">Tên bất động sản</label>
                     <input type="text" name="name" class="form-control" th:value="${property.name}" id="name"
@@ -108,8 +109,7 @@
                 <h5 class="mb-3 text-primary mt-3 mb-3 ">Chọn ảnh mới</h5>
                 <p>Vui lòng tải lên ít nhất 3 hình ảnh. Bạn có thể chọn nhiều hình cùng lúc.</p>
                 <div class="mb-3">
-                    <input type="file" name="images" class="form-control" id="image-upload" required multiple
-                        accept="image/*">
+                    <input type="file" name="images" class="form-control" id="image-upload" multiple accept="image/*">
                 </div>
                 <div class="bg-white p-3 text-center rounded-bottom">
                     <button id="continue-btn" class="btn btn-primary btn-lg w-100">Tạo</button>
@@ -139,8 +139,9 @@
                 let form = e.target
                 let formData = new FormData(form)
                 let token = getCookie('token')
-                let response = await fetch("/api/listing", {
-                    method: "POST", body: formData, headers: {
+                let id = $('input[name=property-id]').val()
+                let response = await fetch("/api/listing/realtor/" + id, {
+                    method: "PUT", body: formData, headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 })

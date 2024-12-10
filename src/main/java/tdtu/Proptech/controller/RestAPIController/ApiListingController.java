@@ -176,9 +176,16 @@ public class ApiListingController {
 
 	@GetMapping("/search")
 	public ResponseEntity<ApiResponse> searchProperties(@RequestParam(required = false) String type,
-			@RequestParam(required = false) Double minPrice, @RequestParam(required = false) Double maxPrice,
-			@RequestParam(required = false) String name, @RequestParam(required = false) String address) {
+			@RequestParam(required = false) String priceRange, @RequestParam(required = false) String name,
+			@RequestParam(required = false) String address) {
 		try {
+			Double minPrice = null;
+			Double maxPrice = null;
+			if (priceRange != null && !priceRange.isEmpty()) {
+				String[] priceParts = priceRange.split("-");
+				minPrice = !priceParts[0].isEmpty() ? Double.valueOf(priceParts[0]) : null;
+				maxPrice = priceParts.length > 1 && !priceParts[1].isEmpty() ? Double.valueOf(priceParts[1]) : null;
+			}
 			List<Property> properties = listingService.getPropertiesByCriteria(type, minPrice, maxPrice, name, address);
 			List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 			return ResponseEntity.ok(new ApiResponse("Properties retrieved successfully", propertyDTOs));
