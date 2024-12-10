@@ -35,6 +35,10 @@ public class PaymentServiceImpl implements PaymentService{
         Subscription newSubscription = subscriptionService.getSubscriptionById(request.getSubscriptionId());
         User existingUser = userService.getUserByEmail(userEmail);
 
+        if(request.getAmount() == null || newSubscription.getPrice() > request.getAmount()){
+            throw new RuntimeException("Insufficient amount for the subscription.");
+        }
+
         if (existingUser.isSubscriptionActive()) {
             Subscription currentSubscription = existingUser.getSubscription();
             if (newSubscription.getId() > currentSubscription.getId()) {
