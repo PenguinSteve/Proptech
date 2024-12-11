@@ -35,10 +35,6 @@ public class PaymentServiceImpl implements PaymentService{
         Subscription newSubscription = subscriptionService.getSubscriptionById(request.getSubscriptionId());
         User existingUser = userService.getUserByEmail(userEmail);
 
-        if(request.getAmount() == null || newSubscription.getPrice() > request.getAmount()){
-            throw new RuntimeException("Insufficient amount for the subscription.");
-        }
-
         if (existingUser.isSubscriptionActive()) {
             Subscription currentSubscription = existingUser.getSubscription();
             if (newSubscription.getId() > currentSubscription.getId()) {
@@ -55,7 +51,7 @@ public class PaymentServiceImpl implements PaymentService{
         Payment payment = new Payment();
         payment.setRealtor(existingUser);
         payment.setSubscription(newSubscription);
-        payment.setAmount(request.getAmount());
+        payment.setAmount(newSubscription.getPrice());
         payment.setPaymentDate(request.getPaymentDate());
         payment.setPaymentMethod(request.getPaymentMethod());
 

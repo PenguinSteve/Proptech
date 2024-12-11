@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AssignSubscriptionRequest {
     private Long subscriptionId;
-    private Double amount;
     private LocalDateTime paymentDate;
     private String paymentMethod;
 }
