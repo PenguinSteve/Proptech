@@ -78,7 +78,7 @@ public class ApiSalesController {
             Sales sales = salesService.updatePendingSoldProperty(propertyId, status);
 
             if(sales == null){
-                return ResponseEntity.ok(new ApiResponse("Property was canceled successfully", null));
+                return ResponseEntity.ok(new ApiResponse("Property was canceled successfully", true));
             }
             return ResponseEntity.ok(new ApiResponse("Property was approved successfully", salesService.convertSalesToSalesDTO(sales)));
         }

@@ -1,108 +1,149 @@
 <div th:replace="~{/layout/admin/header}"></div>
 <div class="container-fluid pt-4 px-4">
-    <h3 class="mb-0 text-secondary" style="text-align: center;">Bài Đăng Chờ Phê Duyệt</h3>
-    <div class="bg-light text-center rounded p-4">
-        <div class="table-responsive">
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Adress</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Area (m²)</th>
-                        <th scope="col">Realtor</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="products">
-                    <tr th:each="property:${pendingAvailable}">
-                        <td>[[${property.name}]]</td>
-                        <td>[[${property.address}]]</td>
-                        <td>[[${property.price}]]</td>
-                        <td>[[${property.area}]]</td>
-                        <td>[[${property.realtor.name}]]</td>
-                        <td>
-                            <a th:href="@{'/admin/review/'+${property.id}}"><i
-                                    class="btn fa-solid fa-magnifying-glass"></i></a>
-                            <a href="#" th:onclick="'acceptPendingAvailable('+${property.id}+',\'UNAVAILABLE\')'"><i
-                                    class="btn fa-solid fa-x text-danger"></i></a>
-                            <a href="#" th:onclick="'acceptPendingAvailable('+${property.id}+',\'AVAILABLE\')'"><i
-                                    class="btn fa-solid fa-check text-success"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-                <div id="pagination-page"></div>
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pending-available" data-bs-toggle="tab" data-bs-target="#available-tab"
+                type="button" role="tab" aria-controls="available-tab" aria-selected="true">Bài đăng chờ phê
+                duyệt</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pending-sold" data-bs-toggle="tab" data-bs-target="#sold-tab" type="button"
+                role="tab" aria-controls="sold-tab" aria-selected="false">Yêu Cầu Phê Duyệt Bán</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pending-rental" data-bs-toggle="tab" data-bs-target="#rental-tab" type="button"
+                role="tab" aria-controls="rental-tab" aria-selected="false">Yêu Cầu Phê Duyệt Thuê</button>
+        </li>
+    </ul>
+    <div class="tab-content mt-3" id="paymentTabsContent">
+        <div class="tab-pane fade show active" id="available-tab" role="tabpanel" aria-labelledby="pending-available">
+            <div class="bg-light text-center rounded p-4">
+                <div class="table-responsive">
+                    <table class="table shadow">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name</th>
+                                <th scope="col">Adress</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Area (m²)</th>
+                                <th scope="col">Realtor</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="property:${pendingAvailable}">
+                                <td>[[${property.name}]]</td>
+                                <td>[[${property.address}]]</td>
+                                <td>[[${property.price}]]</td>
+                                <td>[[${property.area}]]</td>
+                                <td>[[${property.realtor.name}]]</td>
+                                <td>
+                                    <a th:href="@{'/admin/review/'+${property.id}}"><i
+                                            class="btn fa-solid fa-magnifying-glass"></i></a>
+                                    <a href="#"
+                                        th:onclick="'acceptPendingAvailable('+${property.id}+',\'UNAVAILABLE\')'"><i
+                                            class="btn fa-solid fa-x text-danger"></i></a>
+                                    <a href="#"
+                                        th:onclick="'acceptPendingAvailable('+${property.id}+',\'AVAILABLE\')'"><i
+                                            class="btn fa-solid fa-check text-success"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${pendingAvailable.size()==0}" class="d-flex justify-content-center">
+                        <p colspan="5" class="text-center">(Trống)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-pane fade" id="sold-tab" role="tabpanel" aria-labelledby="pending-sold">
+            <div class="bg-light text-center rounded p-4">
+                <div class="table-responsive">
+                    <table class="table shadow">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name Property</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Sales Date</th>
+                                <th scope="col">Sales Price</th>
+                                <th scope="col">Buyer Name</th>
+                                <th scope="col">Buyer Email</th>
+                                <th scope="col">Buyer Phone</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="sale:${pedingSold}">
+                                <td scope="col">[[${sale.property.name}]]</td>
+                                <td scope="col">[[${sale.property.address}]]</td>
+                                <td scope="col">[[${sale.salesDate}]]</td>
+                                <td scope="col">[[${sale.salesPrice}]]</td>
+                                <td scope="col">[[${sale.buyerName}]]</td>
+                                <td scope="col">[[${sale.buyerEmail}]]</td>
+                                <td scope="col">[[${sale.buyerPhone}]]</td>
+                                <td scope="col">
+                                    <a href="#"
+                                        th:onclick="'acceptPendingSold('+${sale.property.id}+',\'UNAVAILABLE\')'"><i
+                                            class="btn fa-solid fa-x text-danger"></i></a>
+                                    <a href="#" th:onclick="'acceptPendingSold('+${sale.property.id}+',\'SOLD\')'"><i
+                                            class="btn fa-solid fa-check text-success"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div th:if="${pedingSold.size()==0}" class="d-flex justify-content-center">
+                        <p colspan="5" class="text-center">(Trống)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="rental-tab" role="tabpanel" aria-labelledby="pending-rental">
+            <div class="bg-light text-center rounded p-4">
+                <div class="table-responsive">
+                    <table class="table shadow">
+                        <thead>
+                            <tr>
+                                <th scope="col">Name Property</th>
+                                <th scope="col">Address</th>
+                                <th scope="col">Rental Duration</th>
+                                <th scope="col">Rental Price</th>
+                                <th scope="col">Rental Name</th>
+                                <th scope="col">Rental Email</th>
+                                <th scope="col">Rental Phone</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr th:each="rental:${pendingRented}">
+                                <td scope="col">[[${rental.property.name}]]</td>
+                                <td scope="col">[[${rental.property.address}]]</td>
+                                <td scope="col">[[${rental.rentalDuration}]]</td>
+                                <td scope="col">[[${rental.rentalPrice}]]</td>
+                                <td scope="col">[[${rental.renterName}]]</td>
+                                <td scope="col">[[${rental.renterEmail}]]</td>
+                                <td scope="col">[[${rental.renterPhone}]]</td>
+                                <td scope="col">
+                                    <a href="#"
+                                        th:onclick="'acceptPendingRental('+${rental.property.id}+',\'UNAVAILABLE\')'"><i
+                                            class="btn fa-solid fa-x text-danger"></i></a>
+                                    <a href="#"
+                                        th:onclick="'acceptPendingRental('+${rental.property.id}+',\'RENTED\')'"><i
+                                            class="btn fa-solid fa-check text-success"></i></a>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <div th:if="${pendingRented.size()==0}" class="d-flex justify-content-center">
+                        <p colspan="5" class="text-center">(Trống)</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="container-fluid pt-4 px-4">
-    <h3 class="mb-0 text-secondary" style="text-align: center;">Yêu Cầu Phê Duyệt Bán</h3>
-    <div class="bg-light text-center rounded p-4">
-        <div class="table-responsive">
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th scope="col">Name Property</th>
-                        <th scope="col">Address</th>
-                        <th scope="col">Sales Date</th>
-                        <th scope="col">Sales Price</th>
-                        <th scope="col">Buyer Name</th>
-                        <th scope="col">Buyer Email</th>
-                        <th scope="col">Buyer Phone</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="products">
-                    <tr th:each="sale:${pedingSold}">
-                        <td scope="col">[[${sale.property.name}]]</td>
-                        <td scope="col">[[${sale.property.address}]]</td>
-                        <td scope="col">[[${sale.salesDate}]]</td>
-                        <td scope="col">[[${sale.salesPrice}]]</td>
-                        <td scope="col">[[${sale.buyerName}]]</td>
-                        <td scope="col">[[${sale.buyerEmail}]]</td>
-                        <td scope="col">[[${sale.buyerPhone}]]</td>
-                        <td scope="col">
-                            <a href="#"><i class="btn fa-solid fa-x text-danger"></i></a>
-                            <a href="#"><i class="btn fa-solid fa-check text-success"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-                <div id="pagination-page"></div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container-fluid pt-4 px-4">
-    <h3 class="mb-0 text-secondary" style="text-align: center;">Yêu Cầu Phê Duyệt Thuê</h3>
-    <div class="bg-light text-center rounded p-4">
-        <div class="table-responsive">
-            <table class="table ">
-                <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Stock</th>
-                        <th scope="col">Category</th>
-                        <th scope="col">Brand</th>
-                        <th scope="col">Color</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Action</th>
-                    </tr>
-                </thead>
-                <tbody id="products">
-                </tbody>
-            </table>
-            <div class="d-flex justify-content-end">
-                <div id="pagination-page"></div>
-            </div>
-        </div>
-    </div>
+
 </div>
 
 <div th:replace="~{/layout/admin/footer}"></div>
@@ -112,6 +153,7 @@
         let apiReponse = await response.json()
         if (apiReponse.data != null) {
             alert("Thành công")
+            window.location.href = "/admin"
             return
         }
         alert("Không thành công")
@@ -120,16 +162,24 @@
 
     })
     async function acceptPendingSold(id, status) {
-        let response = await fetch(`/api/sales/admin/pending/sales/{propertyId}/status?status=${status}`, { method: "PUT" })
+        let response = await fetch(`/api/sales/admin/pending/sales/${id}/status?status=${status}`, { method: "PUT" })
         let apiReponse = await response.json()
         if (apiReponse.data != null) {
+            window.location.href = "/admin"
             alert("Thành công")
             return
         }
         alert("Không thành công")
     }
-    $(document).ready(async function () {
-
-    })
+    async function acceptPendingRental(id, status) {
+        let response = await fetch(`/api/rental/admin/pending/rental/${id}/status?status=${status}`, { method: "PUT" })
+        let apiReponse = await response.json()
+        if (apiReponse.data != null) {
+            window.location.href = "/admin"
+            alert("Thành công")
+            return
+        }
+        alert("Không thành công")
+    }
 
 </script>
