@@ -38,7 +38,8 @@
         <h2 class="heading text-primary">[[${property.name}]]</h2>
         <p class="meta">[[${property.address}]]</p>
         <p class="text-black-50">
-          <b>Giá</b>: [[${property.price}]]
+          <b>Giá</b>: [[${formatter.priceFormatter( property.price*1000)}]] VNĐ <span
+            th:if="${property.type=='RENTAL'}">/ Tháng</span>
         </p>
         <p class="text-black-50">
           <b>Loại</b>: [[${property.type}]]

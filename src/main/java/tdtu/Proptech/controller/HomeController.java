@@ -1,8 +1,6 @@
 package tdtu.Proptech.controller;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import tdtu.Proptech.CustomFormatter;
 import tdtu.Proptech.dto.PropertyDTO;
 import tdtu.Proptech.model.Property;
 import tdtu.Proptech.model.Subscription;
@@ -29,12 +28,14 @@ import tdtu.Proptech.service.subscription.SubscriptionService;
 public class HomeController {
 	ListingService listingService;
 	SubscriptionService subscriptionService;
+	CustomFormatter customFormatter;
 
 	@GetMapping(value = { "/", "/home", "" })
 	public String index(Model model) {
 		List<Property> properties = listingService.getSalesProperties();
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
+		model.addAttribute("formatter", customFormatter);
 		return "index";
 	}
 
@@ -45,6 +46,7 @@ public class HomeController {
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
 		model.addAttribute("title", "All Properties");
+		model.addAttribute("formatter", customFormatter);
 		return "properties";
 	}
 
@@ -55,6 +57,7 @@ public class HomeController {
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
 		model.addAttribute("title", "Rental Properties");
+		model.addAttribute("formatter", customFormatter);
 
 		return "properties";
 	}
@@ -66,6 +69,8 @@ public class HomeController {
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
 		model.addAttribute("title", "Sale Properties");
+		model.addAttribute("formatter", customFormatter);
+
 		return "properties";
 	}
 
@@ -74,6 +79,8 @@ public class HomeController {
 		Property property = listingService.getPropertyById(id);
 		PropertyDTO propertyDTO = listingService.converPropertyToPropertyDTO(property);
 		model.addAttribute("property", propertyDTO);
+		model.addAttribute("formatter", customFormatter);
+
 		return "property-single";
 	}
 
@@ -121,14 +128,16 @@ public class HomeController {
 		Property property = listingService.getPropertyById(id);
 		PropertyDTO propertyDTO = listingService.converPropertyToPropertyDTO(property);
 		model.addAttribute("property", propertyDTO);
+		model.addAttribute("formatter", customFormatter);
 		return "sell-process";
 	}
 
 	@GetMapping("/rentalProcess/{id}")
-	public String rentalProcess(@PathVariable long id,Model model) {
+	public String rentalProcess(@PathVariable long id, Model model) {
 		Property property = listingService.getPropertyById(id);
 		PropertyDTO propertyDTO = listingService.converPropertyToPropertyDTO(property);
 		model.addAttribute("property", propertyDTO);
+		model.addAttribute("formatter", customFormatter);
 		return "rental-process";
 	}
 
@@ -146,6 +155,7 @@ public class HomeController {
 		List<Property> properties = listingService.getPropertiesByCriteria(type, minPrice, maxPrice, name, address);
 		List<PropertyDTO> propertyDTOs = listingService.convertPropetiesToPropertiesDTO(properties);
 		model.addAttribute("properties", propertyDTOs);
+		model.addAttribute("formatter", customFormatter);
 		return "search";
 	}
 
@@ -153,7 +163,7 @@ public class HomeController {
 	public String payment(@PathVariable long subsriptionId, Model model) {
 		Subscription subscription = subscriptionService.getSubscriptionById(subsriptionId);
 		model.addAttribute("subscription", subscription);
-		model.addAttribute("price", NumberFormat.getInstance(new Locale("vi", "VN")).format(subscription.getPrice()));
+		model.addAttribute("price", customFormatter.priceFormatter(subscription.getPrice()));
 		return "payment";
 	}
 
@@ -161,6 +171,7 @@ public class HomeController {
 	public String subscriptions(Model model) {
 		List<Subscription> subscriptions = subscriptionService.getAllSubscription();
 		model.addAttribute("subscriptions", subscriptions);
+		model.addAttribute("formatter",customFormatter);
 		return "subscriptions";
 	}
 
