@@ -141,7 +141,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             $('input[name=rentalDuration]').change(() => {
                 const price = [[${ property.price }]] * $('input[name=rentalDuration]').val()
-                const priceReview = price * 1000
+                const priceReview = price * 1000000
                 $('input[name=rentalPrice-review]').val(priceReview.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }))
                 $('input[name=rentalPrice]').val(price)
             })

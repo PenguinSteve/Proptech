@@ -2,6 +2,7 @@ package tdtu.Proptech.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -98,7 +99,7 @@ public class HomeController {
 	public String error() {
 		return "error";
 	}
-
+    @PreAuthorize("hasRole('REALTOR')")
 	@GetMapping("/addProperty")
 	public String addProperty() {
 		return "add-property";
@@ -158,7 +159,7 @@ public class HomeController {
 		model.addAttribute("formatter", customFormatter);
 		return "search";
 	}
-
+    @PreAuthorize("hasRole('REALTOR')")
 	@GetMapping("/payment/{subsriptionId}")
 	public String payment(@PathVariable long subsriptionId, Model model) {
 		Subscription subscription = subscriptionService.getSubscriptionById(subsriptionId);

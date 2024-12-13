@@ -28,7 +28,7 @@
                 <h1 class="heading">Cổng thanh toán</h1>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb text-center justify-content-center">
-                        <li class="breadcrumb-item text-white"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item text-white"><a href="/">Home</a></li>
                         <li class="breadcrumb-item active text-white-50" aria-current="page">
                             Payment
                         </li>
@@ -62,13 +62,14 @@
                 <!-- ATM Payment -->
                 <div class="tab-pane fade show active" id="atm" role="tabpanel" aria-labelledby="atm-tab">
                     <div class="card-input">
-                        <label for="cardNumber" class="form-label">Số thẻ</label>
-                        <input type="text" id="cardNumber" required class="form-control mb-3" placeholder="Nhập số thẻ">
-
-                        <label for="cardName" class="form-label">Tên trên thẻ (không dấu)</label>
-                        <input type="text" id="cardName" required class="form-control mb-3"
-                            placeholder="Nhập tên trên thẻ">
                         <form id="payment-form">
+                            <label for="cardNumber" class="form-label">Số thẻ</label>
+                            <input type="text" id="cardNumber" required class="form-control mb-3"
+                                placeholder="Nhập số thẻ">
+
+                            <label for="cardName" class="form-label">Tên trên thẻ (không dấu)</label>
+                            <input type="text" id="cardName" required class="form-control mb-3"
+                                placeholder="Nhập tên trên thẻ">
                             <input type="hidden" name="subscriptionId" th:value="${subscription.id}">
                             <input type="hidden" name="amount" th:value="${subscription.price}">
                             <button class="btn btn-primary w-100">Thanh toán đ[[${price}]]</button>
